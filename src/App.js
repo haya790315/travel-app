@@ -1,10 +1,17 @@
-import './App.css';
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Navbar } from "./components";
+import { Home } from "./page";
 function App() {
-  console.log(process.env.REACT_APP_API_KEY);
-  
   return (
-    <div className="App">
+    <div className="wrapper">
+      <Router>
+        <Navbar />
+        <Switch>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
