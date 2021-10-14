@@ -276,7 +276,7 @@ const Navbar = () => {
               </NavBtnLink>
             </NavItemBtn>
             <NavIconContainer>
-              <NavIconLink to="signUp">新規登録</NavIconLink>
+              <NavIconLink to="sign-up">新規登録</NavIconLink>
               <NavIcons>
                 <a href={ins} rel="noreferrer" target="_blank">
                   <AiFillInstagram />

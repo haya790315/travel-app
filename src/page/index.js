@@ -1,1 +1,2 @@
-export {default as Home} from "./home/home"
+export {default as Home} from "./Home"
+export {default as SignUp} from './SignUp'

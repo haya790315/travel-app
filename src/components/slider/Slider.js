@@ -4,16 +4,13 @@ import { KeyboardArrowRight, KeyboardArrowLeft } from "@mui/icons-material";
 const ContainerSlider = styled.div`
   width: 90%;
   height: 300px;
-  margin: 100px auto 0;
+  margin: 100px auto ;
   position: relative;
   align-items: center;
   overflow: hidden;
   justify-content: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: 900px) {
-    .container-slider {
-      margin: 100px 10px 0;
-    }
   }
 `;
 const Slide = styled.div`
@@ -73,6 +70,7 @@ const Dot = styled.div`
   border: 2px solid #f1f1f1;
   margin: 0 5px;
   background: ${({ active }) => (active ? "#4e4e4e" : "#f1f1f1")};
+  cursor: pointer;
 `;
 
 export default function Slider() {
