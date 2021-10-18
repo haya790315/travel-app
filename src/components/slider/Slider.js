@@ -28,6 +28,9 @@ const Img = styled.img`
   height: 100%;
   object-position: 50% 50%;
   object-fit: cover;
+  &:hover{
+    cursor: pointer;
+  }
 `;
 const ButtonContainer = styled.div`
   width: 100%;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FavoriteBorder } from "@mui/icons-material";
 import { travelData } from "../../Data/data";
 import { projectFirestore } from "../../firebase/config";
-
+import {Link} from "react-router-dom"
 const CardContainer = styled.div`
   height: 400px;
   width: 250px;
@@ -68,6 +68,14 @@ const CardFooter = styled.div`
   }
 `;
 
+const LinkStyled = styled(Link)`
+  text-decoration: none;
+  border:none;
+  outline: none;
+  color:inherit;
+`
+
+
 function Card({ location }) {
   // const [travelData, setTravelData] = useState([]);
   // const fetchTravelData = () => {
@@ -90,29 +98,31 @@ function Card({ location }) {
 
   return (
     <>
-      {location.map(({ title, img, date, des, price, duration }, index) => {
+      {location.map(({ title, img, date, des, price, duration,id }, index) => {
         return (
-          <CardContainer key={index}>
-            <CardTitle>
-              <h4>{title}</h4>
-              <span>{date}</span>
-            </CardTitle>
-            <div>
-              <Img src={img} />
-            </div>
-            <CardContent>
-              <CardBody>
-                <p>{des}</p>
-              </CardBody>
-            </CardContent>
-            <CardFooter>
-              <h4>{price}</h4>
-              <span>{duration}</span>
-              <span>
-                <FavoriteBorder />
-              </span>
-            </CardFooter>
-          </CardContainer>
+          <LinkStyled to={"/home/"+id}>
+            <CardContainer key={index}>
+              <CardTitle>
+                <h4>{title}</h4>
+                <span>{date}</span>
+              </CardTitle>
+              <div>
+                <Img src={img} />
+              </div>
+              <CardContent>
+                <CardBody>
+                  <p>{des}</p>
+                </CardBody>
+              </CardContent>
+              <CardFooter>
+                <h4>{price}</h4>
+                <span>{duration}</span>
+                <span>
+                  <FavoriteBorder />
+                </span>
+              </CardFooter>
+            </CardContainer>
+          </LinkStyled>
         );
       })}
     </>

@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaTimes, FaBars } from "react-icons/fa";
 import { AiFillInstagram, AiFillFacebook } from "react-icons/ai";
-import { TravelExplore, DirectionsCar, HomeWork,YouTube } from "@mui/icons-material";
+import {
+  TravelExplore,
+  DirectionsCar,
+  HomeWork,
+  YouTube,
+} from "@mui/icons-material";
 import logo from "../../image/logo.png";
 import { Link } from "react-router-dom";
 const Nav = styled.nav`
-  width:100%;
+  width: 100%;
   background: black;
   height: 80px;
   display: flex;
@@ -46,7 +51,7 @@ const Button = styled.button`
   outline: none;
   cursor: pointer;
   border: none;
-    opacity: 0.9;
+  opacity: 0.9;
   &:hover {
     transition: all 0.5s ease-in-out;
     transform: translateY(10%);
@@ -229,16 +234,22 @@ const NavBtnLink = styled(Link)`
   outline: none;
 `;
 
-const Navbar = () => {
+const Navbar = ({ openLoginHandler }) => {
   const [sideMenu, setSideMenu] = useState(false);
 
   const ins = "https://about.instagram.com/ja-jp";
   const fb = "https://www.facebook.com/";
-  const yt = "https://www.youtube.com/"
+  const yt = "https://www.youtube.com/";
 
   const toggleMenuHandler = () => {
     setSideMenu((prevState) => !prevState);
   };
+
+  const loginButtonHandler = ()=>{
+    setSideMenu(false);
+    openLoginHandler();
+  }
+
 
   return (
     <>
@@ -252,28 +263,26 @@ const Navbar = () => {
           </MobileIcon>
           <NavMenu click={sideMenu}>
             <NavItem onClick>
-              <NavLinks to="/">
+              <NavLinks to="/home">
                 <DirectionsCar style={{ marginRight: "5px" }} />
                 国内旅行
               </NavLinks>
             </NavItem>
             <NavItem onClick>
-              <NavLinks to="/service">
+              <NavLinks to="/aboard">
                 <TravelExplore style={{ marginRight: "5px" }} />
                 海外旅行
               </NavLinks>
             </NavItem>
             <NavItem onClick>
-              <NavLinks to="/product">
+              <NavLinks to="/reservation">
                 <HomeWork style={{ marginRight: "5px" }} />
                 宿泊予約
               </NavLinks>
             </NavItem>
 
             <NavItemBtn>
-              <NavBtnLink to="/sign-up">
-                <Button>ログイン</Button>
-              </NavBtnLink>
+              <Button onClick={loginButtonHandler}>ログイン</Button>
             </NavItemBtn>
             <NavIconContainer>
               <NavIconLink to="sign-up">新規登録</NavIconLink>
@@ -284,7 +293,9 @@ const Navbar = () => {
                 <a href={fb} rel="noreferrer" target="_blank">
                   <AiFillFacebook />
                 </a>
-                <a href={yt}><YouTube/></a>
+                <a href={yt}>
+                  <YouTube />
+                </a>
               </NavIcons>
             </NavIconContainer>
           </NavMenu>

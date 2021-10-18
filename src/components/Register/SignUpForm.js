@@ -1,8 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
-import { MemberInformationForm } from "./Form";
+import MemberInformationForm  from "./MemberInformationForm";
+import SignUpCompletedCard from "./SignUpCompletedCard";
 
-const Wrapper = styled.div`
+const FormWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -11,6 +12,17 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 1000px;
   background-color: #ffffff;
+  animation:${({open})=>open ? "fade-keyframes 2s forwards" : ""}  ;
+
+  @keyframes fade-keyframes {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
 `;
 
 const Navbar = styled.div`
@@ -45,13 +57,19 @@ const Heading = styled.h1`
 `;
 
 const SignUpForm = () => {
+  const [open , setOpen] = useState(false)
+  
+  
   return (
-    <Wrapper>
+    <>
+    <FormWrapper open={open}>
       <Navbar>
         <Heading>新規登録</Heading>
       </Navbar>
-      <MemberInformationForm />
-    </Wrapper>
+      <MemberInformationForm setOpen={setOpen}/>
+    </FormWrapper>
+    { open && <SignUpCompletedCard open={open}/>}
+    </>
   );
 };
 

@@ -140,7 +140,7 @@ const FormButton = styled.button`
   margin: 20px 10px 0 0;
 `;
 
-export const MemberInformationForm = () => {
+  const MemberInformationForm = ({ setOpen }) => {
   const [formToggle, setFormToggle] = useState(false);
 
   const [form, setForm] = useState({
@@ -154,7 +154,6 @@ export const MemberInformationForm = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState([]);
-
   const [accountChecker, setAccountChecker] = useState("");
   const [passwordChecker, setPasswordChecker] = useState("");
 
@@ -167,6 +166,7 @@ export const MemberInformationForm = () => {
   };
 
   const submitHandler = () => {
+
     let storageArray = [];
     if (localStorage.getItem("user")) {
       const storage = JSON.parse(localStorage.getItem("user"));
@@ -176,8 +176,19 @@ export const MemberInformationForm = () => {
       storageArray.push(form);
       localStorage.setItem("user", JSON.stringify(storageArray));
     }
+    setOpen(true);
   };
 
+  
+  const submitButtonDisabledHandler = () => {
+    if (accountChecker && passwordChecker) {
+      return (
+        accountChecker !== form.account || passwordChecker !== form.password
+      );
+    } else {
+      return false;
+    }
+  };
   const nameValidator = (name, key) => {
     if (!form[key]) {
       return `*お名前(${name})が入力されていません`;
@@ -217,12 +228,14 @@ export const MemberInformationForm = () => {
     if (!lastName) {
       error.push("*お名前(名)が入力されていません");
     }
+
     if (!birthday) {
       error.push("*生年月日を選んでください");
     }
     if (!gender) {
       error.push("*性別を選んでください");
     }
+    console.log(error);
     setErrorMessage(error);
     return error;
   };
@@ -230,10 +243,9 @@ export const MemberInformationForm = () => {
   const buttonHandler = (e) => {
     e.preventDefault();
     const error = checkValidateHandler();
-    if (!error.length) {
+    if (error.length < 1) {
       setFormToggle((prev) => !prev);
     }
-    console.log(form);
   };
 
   if (formToggle === false)
@@ -362,7 +374,6 @@ export const MemberInformationForm = () => {
             </Label>
             <Input
               type="text"
-              required
               key="3"
               id="account-prev"
               name="account-prev"
@@ -395,7 +406,6 @@ export const MemberInformationForm = () => {
               type="password"
               id="password"
               placeholder="半角英数8文字以上"
-              required
               value={form.password}
               validator={passwordValidator}
               onChangeFunction={onChangeFunction("password")}
@@ -421,7 +431,7 @@ export const MemberInformationForm = () => {
             <FormButton
               type="button"
               onClick={submitHandler}
-              // disabled={!!checkPasswordValidator() || !!checkValidateHandler()}
+              disabled={submitButtonDisabledHandler()}
             >
               登録する
               <IoIosArrowForward />
@@ -431,3 +441,6 @@ export const MemberInformationForm = () => {
       </FormContainer>
     );
 };
+
+
+export default MemberInformationForm;

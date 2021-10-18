@@ -1,8 +1,7 @@
 import React from "react";
-import {  TextField, Box } from "@mui/material";
+import { TextField, Box } from "@mui/material";
 import { FormControlUnstyled } from "@mui/core";
 import useInput from "./use-input";
-import {Link} from 'react-router-dom'
 import styled from "styled-components";
 
 const NextStepButton = styled.button`
@@ -21,23 +20,23 @@ const NextStepButton = styled.button`
   outline: none;
   border: 1px solid #909090;
   cursor: pointer;
-  opacity : ${({disabled})=>disabled?"0.5":"1"};
+  opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
   &:hover {
     background: rgb(250, 205, 93);
   }
 `;
 
-
-
-const EmailInput = ({toggleInputHandler,formEditHandler}) => {
+const AccountInput = ({ toggleInputHandler, formEditHandler }) => {
   const { value, isValid, hasError, valueChangeHandler, inputIsTouched } =
-    useInput((value) => value.includes("@"));
-  const label = hasError ? "メール形式が正しくありません" : "メールアドレス";
+    useInput((value)=>value.trim()!=="" && value.trim()>8);
+  const label = hasError ? "アカウントを入力ください" : "アカウント";
 
+  
 
-  const nextButtonHandler=()=>{
+  const nextButtonHandler = () => {
     toggleInputHandler();
-    formEditHandler(prev=>({...prev,email:value})) }
+    formEditHandler((prev) => ({ ...prev, account: value }));
+  };
 
   return (
     <FormControlUnstyled>
@@ -60,10 +59,15 @@ const EmailInput = ({toggleInputHandler,formEditHandler}) => {
           placeholder="メールアドレス"
         />
       </Box>
-      <NextStepButton onClick={nextButtonHandler} type="button" disabled={!isValid} >次に進む</NextStepButton>
-        
+      <NextStepButton
+        onClick={nextButtonHandler}
+        type="button"
+        disabled={!isValid}
+      >
+        次に進む
+      </NextStepButton>
     </FormControlUnstyled>
   );
 };
 
-export default EmailInput;
+export default AccountInput;

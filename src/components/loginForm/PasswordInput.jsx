@@ -1,9 +1,9 @@
-import React,{useState} from "react";
-import { Input, TextField, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { TextField, Box } from "@mui/material";
 import { FormControlUnstyled } from "@mui/core";
 import useInput from "./use-input";
 import styled from "styled-components";
-import {Link} from "react-router-dom"
+
 const SubmitButton = styled.button`
   width: 300px;
   height: auto;
@@ -20,84 +20,107 @@ const SubmitButton = styled.button`
   outline: none;
   border: 1px solid #909090;
   cursor: pointer;
-  opacity : ${({disabled})=>disabled?"0.5":"1"};
+  opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
   &:hover {
     background: rgb(250, 205, 93);
   }
 `;
 
-const EmailIndicate = styled.div `
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 12px;
+  margin: 5px 0;
+`;
+
+const EmailIndicate = styled.div`
   width: 200px;
   font-size: 12px;
   color: #606060;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin:10px;
+  margin: 10px;
   transform: translateX(8%);
   & p {
     font-size: 16px;
-    font-weight:300;
+    font-weight: 300;
   }
   & span {
-    color:blue;
-    margin-left:5px;
+    color: blue;
+    margin-left: 5px;
     cursor: pointer;
-    &:hover{
-      color:red;
+    &:hover {
+      color: red;
     }
   }
+`;
 
-`
+const PasswordInput = ({
+  toggleInputHandler,
+  formEditHandler,
+  editedForm,
+  closeLoginHandler,
+}) => {
+  const { value, isValid, hasError, valueChangeHandler, inputIsTouched } =
+    useInput((value) => value.trim() !== "" && value.length > 7);
 
+  const label = hasError ? "パスワードが正しくありません" : "パスワード";
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    formEditHandler((prev) => ({
+      ...prev,
+      password: value,
+    }));
+  }, [value]);
 
-
-
-const PasswordInput = ({toggleInputHandler,formEditHandler,editedForm}) => {
-  const {value, isValid, hasError, valueChangeHandler, inputIsTouched } =
-    useInput((value) => value.trim()!==""&& value.length >5);
-
-  const label = hasError ? "パスワードが正しくありません": "パスワード";
-  
-
-  const submitButtonHandler = ()=>{
-
-    formEditHandler((prev)=>({
-      ...prev,password:value
-    }))
-    console.log(editedForm);
-  }
+  const submitButtonHandler = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    user.find((user) => {
+      const { password, account } = user;
+      if (password === editedForm.password && account === editedForm.account) {
+        closeLoginHandler(false);
+      } else {
+        setErrorMessage("パスワードが間違っています");
+      }
+    });
+  };
 
   return (
     <FormControlUnstyled>
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "35ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <EmailIndicate>
-      <p>{editedForm.email}</p>
-      <span onClick={toggleInputHandler}>変更</span>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "35ch" },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <EmailIndicate>
+          <p>{editedForm.account}</p>
+          <span onClick={toggleInputHandler}>変更</span>
         </EmailIndicate>
-      <TextField
-        required
-        label={label}
-        size="small"
-        onChange={valueChangeHandler}
-        onBlur={inputIsTouched}
-        autoFocus
-        error={hasError}
-        type="password"
-        placeholder="パスワード"
-      />
-      {/* <Input autoFocus/> */}
-    </Box>
-    <SubmitButton  disabled={!isValid} type="button" onClick={submitButtonHandler} >次に進む</SubmitButton>
-  </FormControlUnstyled>
-  )
-}
+        <TextField
+          required
+          label={label}
+          size="small"
+          onChange={valueChangeHandler}
+          onBlur={inputIsTouched}
+          autoFocus
+          error={hasError}
+          type="password"
+          placeholder="パスワード"
+        />
+      </Box>
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      <SubmitButton
+        disabled={!isValid}
+        type="button"
+        onClick={submitButtonHandler}
+      >
+        ログイン
+      </SubmitButton>
+    </FormControlUnstyled>
+  );
+};
 
-export default PasswordInput
+export default PasswordInput;

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import styled from "styled-components";
-import EmailInput from "./EmailInput";
+import { NavLink  } from "react-router-dom";
+import EmailInput from "./AccountInput";
 import PasswordInput from "./PasswordInput";
-
+import Modal from "./Modal";
+import { GrFormClose } from "react-icons/gr";
 
 const FormContainer = styled.div`
   position: absolute;
@@ -17,6 +19,15 @@ const FormContainer = styled.div`
   border: 1.2px solid #e2e2e2;
   border-radius: 4px;
 `;
+
+const GrFormCloseStyled = styled(GrFormClose)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2rem;
+  cursor: pointer;
+`;
+
 const Heading = styled.h1`
   font-size: 2.5rem;
   font-weight: 300;
@@ -36,9 +47,9 @@ const LoginFormContainer = styled.form`
 
 const SeparateLine = styled.div`
   position: absolute;
-    text-align: center;
-    left: 38%;
-    color:#7a7a7a;
+  text-align: center;
+  left: 38%;
+  color: #7a7a7a;
   &:after {
     position: absolute;
     top: 63%;
@@ -57,7 +68,7 @@ const SeparateLine = styled.div`
     height: 1px;
     background: #dadada;
     top: 63%;
-    right:169%;
+    right: 169%;
   }
 `;
 
@@ -65,7 +76,6 @@ const SignUpButton = styled.button`
   width: 300px;
   height: auto;
   background: #e7e7e7;
-  color: black;
   font-weight: 600;
   transform: translateX(8px);
   padding: 5px 10px;
@@ -75,45 +85,66 @@ const SignUpButton = styled.button`
   border: 1px solid #909090;
   cursor: pointer;
   opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+
   &:hover {
     background: rgb(168, 168, 168);
   }
 `;
 
-const LoginForm = () => {
-  const [emailIsEntered, setEmailIsEntered] = useState(false);
+const SignUpPageLink = styled(NavLink)`
+  color: black;
+  text-decoration: none;
+`;
+
+const LoginForm = ({ closeLoginHandler }) => {
+  const [accountIsEntered, setAccountIsEntered] = useState(false);
   const [form, setForm] = useState({
-    email: "",
+    account: "",
     password: "",
   });
+
   const toggleInputHandler = () => {
-    setEmailIsEntered(!emailIsEntered);
+    setAccountIsEntered(!accountIsEntered);
   };
 
   const formEditHandler = (value) => {
     setForm(value);
   };
-  console.log(form);
+
+  const signUpButtonHandler = () => {
+    closeLoginHandler();
+  };
+
+
+
   return (
-    <FormContainer>
-      <Heading>ログイン</Heading>
-      <LoginFormContainer>
-        {emailIsEntered ? (
-          <PasswordInput
-            editedForm={form}
-            toggleInputHandler={toggleInputHandler}
-            formEditHandler={formEditHandler}
-          />
-        ) : (
-          <EmailInput
-            toggleInputHandler={toggleInputHandler}
-            formEditHandler={formEditHandler}
-          />
-        )}
-        <SeparateLine>or</SeparateLine>
-        <SignUpButton>アカウントを作成する</SignUpButton>
-      </LoginFormContainer>
-    </FormContainer>
+    <Modal closeLoginHandler={closeLoginHandler}>
+      <FormContainer>
+        <Heading>ログイン</Heading>
+        <GrFormCloseStyled onClick={closeLoginHandler} />
+        <LoginFormContainer>
+          {accountIsEntered ? (
+            <PasswordInput
+              editedForm={form}
+              toggleInputHandler={toggleInputHandler}
+              formEditHandler={formEditHandler}
+              closeLoginHandler={closeLoginHandler}
+            />
+          ) : (
+            <EmailInput
+              toggleInputHandler={toggleInputHandler}
+              formEditHandler={formEditHandler}
+            />
+          )}
+          <SeparateLine>or</SeparateLine>
+          <SignUpPageLink to="/sign-up">
+            <SignUpButton onClick={signUpButtonHandler}>
+              アカウントを作成する
+            </SignUpButton>
+          </SignUpPageLink>
+        </LoginFormContainer>
+      </FormContainer>
+    </Modal>
   );
 };
 
