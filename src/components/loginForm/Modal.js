@@ -36,9 +36,6 @@ const LoginModal = (props) => {
   return (
     <ModalContainer>
       <ModalStyled
-        onClick={() => {
-          console.log("object");
-        }}
       >
         {props.children}
       </ModalStyled>

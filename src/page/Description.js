@@ -3,7 +3,7 @@ import { Detail } from '../components'
 const Description = () => {
   return (
     <div>
-      <Detail/>
+      <Detail />
     </div>
   )
 }

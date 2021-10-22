@@ -1,10 +1,11 @@
-import React, { useState  } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { NavLink  } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import EmailInput from "./AccountInput";
 import PasswordInput from "./PasswordInput";
 import Modal from "./Modal";
 import { GrFormClose } from "react-icons/gr";
+import { useAuthContext } from "../../AuthContext";
 
 const FormContainer = styled.div`
   position: absolute;
@@ -103,6 +104,7 @@ const LoginForm = ({ closeLoginHandler }) => {
     password: "",
   });
 
+
   const toggleInputHandler = () => {
     setAccountIsEntered(!accountIsEntered);
   };
@@ -114,36 +116,33 @@ const LoginForm = ({ closeLoginHandler }) => {
   const signUpButtonHandler = () => {
     closeLoginHandler();
   };
-
-
-
   return (
     <Modal closeLoginHandler={closeLoginHandler}>
-      <FormContainer>
-        <Heading>ログイン</Heading>
-        <GrFormCloseStyled onClick={closeLoginHandler} />
-        <LoginFormContainer>
-          {accountIsEntered ? (
-            <PasswordInput
-              editedForm={form}
-              toggleInputHandler={toggleInputHandler}
-              formEditHandler={formEditHandler}
-              closeLoginHandler={closeLoginHandler}
-            />
-          ) : (
-            <EmailInput
-              toggleInputHandler={toggleInputHandler}
-              formEditHandler={formEditHandler}
-            />
-          )}
-          <SeparateLine>or</SeparateLine>
-          <SignUpPageLink to="/sign-up">
-            <SignUpButton onClick={signUpButtonHandler}>
-              アカウントを作成する
-            </SignUpButton>
-          </SignUpPageLink>
-        </LoginFormContainer>
-      </FormContainer>
+        <FormContainer>
+          <Heading>ログイン</Heading>
+          <GrFormCloseStyled onClick={closeLoginHandler} />
+          <LoginFormContainer>
+            {accountIsEntered ? (
+              <PasswordInput
+                editedForm={form}
+                toggleInputHandler={toggleInputHandler}
+                formEditHandler={formEditHandler}
+                closeLoginHandler={closeLoginHandler}
+              />
+            ) : (
+              <EmailInput
+                toggleInputHandler={toggleInputHandler}
+                formEditHandler={formEditHandler}
+              />
+            )}
+            <SeparateLine>or</SeparateLine>
+            <SignUpPageLink to="/sign-up">
+              <SignUpButton onClick={signUpButtonHandler}>
+                アカウントを作成する
+              </SignUpButton>
+            </SignUpPageLink>
+          </LoginFormContainer>
+        </FormContainer>
     </Modal>
   );
 };

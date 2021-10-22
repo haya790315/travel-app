@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FavoriteBorder } from "@mui/icons-material";
 import { travelData } from "../../Data/data";
-import { projectFirestore } from "../../firebase/config";
 import {Link} from "react-router-dom"
+import {flatten} from 'lodash'
+
 const CardContainer = styled.div`
-  height: 400px;
+  height: 450px;
   width: 250px;
   box-shadow: 0px 0px 15px -5px;
   transition: ease-in-out 0.3s;
@@ -73,35 +74,23 @@ const LinkStyled = styled(Link)`
   border:none;
   outline: none;
   color:inherit;
+  display: float;
 `
 
 
 function Card({ location }) {
-  // const [travelData, setTravelData] = useState([]);
-  // const fetchTravelData = () => {
-  //   projectFirestore
-  //     .collection("travelPlans")
-  //     .doc("pugIg7JtS5cbHdgqTWFE")
-  //     .get()
-  //     .then((doc) => {
-  //       console.log(doc.data().travelData);
-  //       setTravelData(doc.data().travelData);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  
 
-  // useEffect(() => {
-  //   fetchTravelData();
-  // }, []);
+
+  
+  
 
   return (
     <>
-      {location.map(({ title, img, date, des, price, duration,id }, index) => {
+      {location.map(({ title, img, date, des, price, duration,id }) => {
         return (
-          <LinkStyled to={"/home/"+id}>
-            <CardContainer key={index}>
+          <LinkStyled to={"/products/"+id} key={id}>
+            <CardContainer >
               <CardTitle>
                 <h4>{title}</h4>
                 <span>{date}</span>

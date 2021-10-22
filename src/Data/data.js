@@ -62,7 +62,7 @@ export const travelData = {
       img: "https://www.his-j.com/kokunai/kanto/photo/item/hokkaido/HKDQ02_bath5.jpg",
       date: "2022/01/30",
       des: "函館→札幌間のJR特急きっぷ＆駅弁セット付！デラックスホテルに泊まる",
-      price: "39,600円  ",
+      price: "39,600円",
       duration: "3日間",
     },
     {

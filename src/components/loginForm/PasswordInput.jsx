@@ -3,6 +3,7 @@ import { TextField, Box } from "@mui/material";
 import { FormControlUnstyled } from "@mui/core";
 import useInput from "./use-input";
 import styled from "styled-components";
+import { useAuthContext } from "../../AuthContext";
 
 const SubmitButton = styled.button`
   width: 300px;
@@ -64,6 +65,8 @@ const PasswordInput = ({
   const { value, isValid, hasError, valueChangeHandler, inputIsTouched } =
     useInput((value) => value.trim() !== "" && value.length > 7);
 
+  const { setUserInInfo, setLoggedIn } = useAuthContext();
+
   const label = hasError ? "パスワードが正しくありません" : "パスワード";
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
@@ -75,16 +78,16 @@ const PasswordInput = ({
 
   const submitButtonHandler = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    user.find((user) => {
-      const { password, account } = user;
-      if (password === editedForm.password && account === editedForm.account) {
-        closeLoginHandler(false);
-      } else {
-        setErrorMessage("パスワードが間違っています");
-      }
-    });
+    
+    const loggedUser = user.find(({password,account})=>
+    password === editedForm.password && account === editedForm.account
+    );
+    if(loggedUser){
+      closeLoginHandler();
+      setUserInInfo(loggedUser);
+      setLoggedIn(true)
+    }
   };
-
   return (
     <FormControlUnstyled>
       <Box
@@ -122,5 +125,4 @@ const PasswordInput = ({
     </FormControlUnstyled>
   );
 };
-
 export default PasswordInput;

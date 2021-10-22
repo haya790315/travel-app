@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { travelData } from "../../Data/data";
-import {flatten} from "lodash"
+import { flatten } from "lodash";
+import { projectFirestore } from "../../firebase/config";
+import CircularProgress from "@mui/material/CircularProgress";
+import { BiHeart } from "react-icons/bi";
+import {FaHeart} from "react-icons/fa"
+import { useAuthContext } from "../../AuthContext";
 
 const Img = styled.img``;
 
@@ -67,6 +71,9 @@ const StarButton = styled(Button)`
 const DescriptionLeft = styled.div`
   flex: 2;
   margin-bottom: 15px;
+  & h4 {
+    color: #4d43db;
+  }
 `;
 
 const MoneyPartStyled = styled.div`
@@ -97,39 +104,158 @@ const DescriptionRight = styled.div`
   flex: 1;
 `;
 
+const Spinner = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const Detail = () => {
+  const [loading, setLoading] = useState(true);
+  const [heartAdded, setHeartAdded] = useState(false);
+  const userContext = useAuthContext();
   const detailParams = useParams();
 
-  let dataDetail = flatten(Object.values(travelData))
-  
-  const data = dataDetail.find((item)=>{
-    if(item.id===detailParams.number){
+  const [travelData, setTravelData] = useState({});
+
+  const fetchTravelData = async () => {
+    const doc = await projectFirestore
+      .collection("travelPlans")
+      .doc("SSbyibFF1shnfxz38lDT")
+      .get();
+    if (doc.data().travelData) {
+      setTravelData(doc.data().travelData);
+      setLoading(false);
+    }
+  };
+
+  const heartList = () => {
+    if (userContext.heartAdded && userContext.heartAdded.includes(`${detailParams.number}`)) {
+      setHeartAdded(true);
+    }
+  };
+
+  const setNewUserInformation = () => {
+    const users = JSON.parse(localStorage.getItem("user"));
+    const newUsers = users.map((user) => {
+      const {
+        account,
+        password,
+        birthday,
+        email,
+        firstName,
+        gender,
+        lastName,
+        heartAdded,
+      } = userContext;
+      if (user.account === userContext.account) {
+        return {
+          account,
+          password,
+          birthday,
+          email,
+          firstName,
+          gender,
+          lastName,
+          heartAdded,
+        };
+      } else {
+        return user;
+      }
+    });
+    localStorage.setItem("user", JSON.stringify(newUsers));
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    try {
+      fetchTravelData()
+    } catch (error) {
+      setLoading(false);
+    }
+    heartList();
+  }, []);
+
+  const dataDetail = flatten(Object.values(travelData));
+
+  const data = dataDetail.find((item) => {
+    if (item.id === detailParams.number) {
       return item;
     }
-  })
+  });
 
-  
-  
-  console.log(dataDetail)
-  
+  const heartAddButtonHandler = () => {
+    if(!userContext.account) return
+    if (userContext.heartAdded) {
+      userContext.heartAdded.push(`${data.id}`);
+    } else {
+      userContext.heartAdded = [`${data.id}`];
+    }
+    setHeartAdded(true);
+    setNewUserInformation();
+  };
+
+  const heartDeleteButtonHandler = () => {
+    if(!userContext.account) return
+
+    const newHeartList = userContext.heartAdded.filter(
+      (item) => item !== data.id
+    );
+    userContext.heartAdded = newHeartList;
+    setNewUserInformation();
+    setHeartAdded(false);
+  };
+
+  const heartButtonCondition = heartAdded ? (
+    <StarButton
+      onClick={() => {
+        heartDeleteButtonHandler();
+      }}
+    >
+      <FaHeart/>
+    </StarButton>
+  ) : (
+    <StarButton
+      onClick={() => {
+        heartAddButtonHandler();
+      }}
+    >
+      お気に入り登録
+      <BiHeart style={{ marginLeft: "10px" }} />
+    </StarButton>
+  );
+
+  if (loading)
+    return (
+      <Container>
+        <Spinner>
+          <CircularProgress />
+        </Spinner>
+      </Container>
+    );
+
   return (
     <>
       <Img></Img>
       <Container>
-        <Heading>お問い合わせ番号:{detailParams.number}</Heading>
+        <Heading>お問い合わせ番号:{data.id}</Heading>
         <Content>
           <Title>{data.title}</Title>
           <Description>
             <DescriptionLeft>
-              <span>【出発日】 2021/11/05 ～ 2022/03/24【人数】 2名1室</span>
+              <span>
+                <h4>【出発日】</h4>
+                {data.date} <h4>【人数】</h4> 2名1室
+              </span>
               <MoneyPartStyled>
-                <span>大人1名様</span> <p>旅行代金 56,800円 ～ 124,800円</p>
+                <span>大人1名様</span> <p>旅行代金 {data.price}</p>
               </MoneyPartStyled>
             </DescriptionLeft>
             <DescriptionRight>
               <Button bg>空室確認</Button>
-              <Button>マイページログイン・会員登録</Button>
-              <StarButton>お気に入り登録</StarButton>
+              <Button>ショッピングカートに入れます</Button>
+              {heartButtonCondition}
             </DescriptionRight>
           </Description>
         </Content>
