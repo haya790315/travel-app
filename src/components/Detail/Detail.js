@@ -8,15 +8,39 @@ import { BiHeart } from "react-icons/bi";
 import {FaHeart} from "react-icons/fa"
 import { useAuthContext } from "../../AuthContext";
 
-const Img = styled.img``;
+const Img = styled.div`
+  background: url("https://www.his-j.com/fair/autumn/kanto/assets/common/images/bnr_autumn960.jpg") no-repeat;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  &:hover{ 
+    transition: all .5s;
+    transform: scale(1.1);
+  }
+`;
+
+const ImgContainer = styled.div `
+  position: absolute;
+  display: block;
+  height: 100px;
+  width: 1000px;
+  top: 20%;
+  left: 8%;
+  overflow: hidden;
+  @media screen and (max-width:900px){
+    width: 450px;
+    
+  }
+`
 
 const Container = styled.div`
   position: absolute;
   width: 90%;
   height: 50vh;
-  top: 200px;
+  top: 250px;
   left: 50%;
-
   transform: translateX(-50%);
 `;
 
@@ -237,7 +261,9 @@ const Detail = () => {
 
   return (
     <>
-      <Img></Img>
+      <ImgContainer>
+      <Img ></Img>
+      </ImgContainer>
       <Container>
         <Heading>お問い合わせ番号:{data.id}</Heading>
         <Content>

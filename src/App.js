@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState , useRef} from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useAuthContext } from "./AuthContext";
 import { Navbar, LoginForm } from "./components";
-import { Home, SignUp, Description } from "./page";
+import { Home, SignUp, Description,ErrorPage } from "./page";
 function App() {
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const openLoginHandler = () => {
@@ -11,25 +10,29 @@ function App() {
   const closeLoginHandler = () => {
     setOpenLoginForm(false);
   };
+  
 
   return (
-    <Router>
-      <div className="wrapper">
+    <div className="wrapper" >
+      <Router>
         <Navbar openLoginHandler={openLoginHandler} />
         {openLoginForm && <LoginForm closeLoginHandler={closeLoginHandler} />}
         <Switch>
-          <Route path="/home">
+          <Route exact path="/home" >
             <Home />
           </Route>
-          <Route path="/products/:number">
+          <Route exact path="/products/:number">
             <Description />
           </Route>
-          <Route path="/sign-up">
+          <Route exact path="/sign-up">
             <SignUp />
           </Route>
+          <Route path="/error">
+            <ErrorPage/>
+          </Route>
         </Switch>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

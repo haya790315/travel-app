@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FaTimes, FaBars } from "react-icons/fa";
+import { Redirect } from "react-router-dom";
 import { AiFillInstagram, AiFillFacebook } from "react-icons/ai";
 import {
   TravelExplore,
   DirectionsCar,
   HomeWork,
   YouTube,
+  ShoppingCartOutlined,
 } from "@mui/icons-material";
 import logo from "../../image/logo.png";
 import { Link } from "react-router-dom";
@@ -123,7 +125,7 @@ const NavMenu = styled.ul`
   @media screen and (max-width: 900px) {
     display: flex;
     flex-direction: column;
-    width: 100vh;
+    width: 100vw;
     height: 90vh;
     position: absolute;
     top: 80px;
@@ -153,7 +155,7 @@ const NavIcons = styled.div`
   @media screen and (max-width: 900px) {
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
     & a {
       text-decoration: none;
       margin: 5px;
@@ -213,7 +215,7 @@ const NavLinks = styled(Link)`
   }
 `;
 
-const NavItemBtn = styled.li`
+const UserButton = styled.div`
   @media screen and (max-width: 900px) {
     display: flex;
     justify-content: center;
@@ -227,51 +229,122 @@ const UserStyled = styled.div`
   height: 60px;
   width: 60px;
   border-radius: 50%;
-  border:2px dashed white;
+  border: 2px dashed white;
   background-color: #236fb6;
-  color:#fff;
+  color: #fff;
   text-align: center;
-  word-wrap:nowrap;
+  word-wrap: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+`;
+const DragDownMenu = styled.ul`
+  position: absolute;
+  display: ${({ show }) => (show ? "flex" : "none")};
+  width: 100px;
+  height: 200px;
+  background-color: #e2e2e2;
+  clip-path: polygon(
+    70% 0,
+    70% 12%,
+    100% 12%,
+    100% 100%,
+    68% 100%,
+    32% 100%,
+    0 100%,
+    0 12%,
+    50% 12%
+  );
+  border-radius: 5px;
+  left: ${(left) => left}px;
+  top: ${(top) => top}px;
+  transform:translate(-60%, -5%);
+  opacity:${({ show }) => (show ? "0.9" : "0")};
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: 0.5s all ease-in-out;
+  @media screen and (max-width: 900px) {
+    display: flex;
+    position: absolute;
+    left: 70%;
+    top: 40%;
+    background: transparent;
+  }
+`;
+const DragMenuLink = styled.li`
+  height: 40px;
+  width: 100%;
+  font-weight: 700;
+  align-items: center;
+  cursor: pointer;
+  color: #2299dd;
+  &:hover {
+    background-color: #fff;
+    color: #4d4d4d;
+    border-bottom: 2px solid black;
+  }
 `;
 
-const LogoutStyled = styled.p`
-  color:#fff;
+const CartStyled = styled.div`
+  color: #fff;
   font-size: 16px;
-  margin-left: 10px ;
+  margin-left: 20px;
   cursor: pointer;
   font-weight: 600;
+  text-align: center;
   &:hover {
     color: #eeee;
   }
-` 
-
+  & p {
+    display: inline-block;
+  }
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
+`;
 
 const Navbar = ({ openLoginHandler }) => {
   const [sideMenu, setSideMenu] = useState(false);
-  
-  
-  const {loggedIn , firstName,lastName,setLoggedIn,setUserInInfo}  = useAuthContext();
+  const [showDragMenu, setShowDragMenu] = useState(false);
+  const [dragMenuPosition, setDragMenuPosition] = useState({});
+  const { loggedIn, firstName, lastName, setLoggedIn, setUserInInfo } =
+    useAuthContext();
   const ins = "https://about.instagram.com/ja-jp";
   const fb = "https://www.facebook.com/";
   const yt = "https://www.youtube.com/";
-
+  console.log(dragMenuPosition);
   const toggleMenuHandler = () => {
     setSideMenu((prevState) => !prevState);
   };
 
-  const loginButtonHandler = ()=>{
+  const loginButtonHandler = () => {
     setSideMenu(false);
     openLoginHandler();
-  }
+    toggleMenuHandler();
+  };
 
-  const logoutButtonHandler = ()=>{
+  const logoutButtonHandler = () => {
     setLoggedIn(false);
     setUserInInfo({});
-  }
-  
-  
+  };
+
+  const dragDownMenuHandler = () => {
+    const userElement = document.getElementById("user_section");
+    const userElementRect = userElement.getBoundingClientRect();
+    const dragMenuTop = userElementRect.bottom;
+    const dragMenuLeft = (userElementRect.right + userElementRect.left) / 2;
+    const dragMenuRight = userElementRect.left;
+    setDragMenuPosition({
+      top: dragMenuTop,
+      left: dragMenuLeft,
+      right: dragMenuRight,
+    });
+  };
+
+  const onMouseEnterEvent = () => {
+    dragDownMenuHandler();
+    setShowDragMenu(true);
+  };
 
   return (
     <>
@@ -303,11 +376,45 @@ const Navbar = ({ openLoginHandler }) => {
               </NavLinks>
             </NavItem>
 
-            <NavItemBtn>
-              {!loggedIn ?<Button onClick={loginButtonHandler}>ログイン</Button>:<UserStyled >{firstName+lastName}</UserStyled>}
-            </NavItemBtn>
-            <NavIconContainer>
-              {!loggedIn ?<NavIconLink to="sign-up">新規登録</NavIconLink>: <LogoutStyled onClick={logoutButtonHandler}>ログアウト</LogoutStyled>}
+            <UserButton onClick={toggleMenuHandler}>
+              {!loggedIn ? (
+                <Button onClick={loginButtonHandler}>ログイン</Button>
+              ) : (
+                <>
+                  <UserStyled
+                    onMouseEnter={onMouseEnterEvent}
+                    onMouseLeave={() => setShowDragMenu(false)}
+                    id="user_section"
+                  >
+                    {firstName + lastName}
+                  <DragDownMenu
+                    show={showDragMenu}
+                    top={dragMenuPosition.top}
+                    left={dragMenuPosition.left}
+                    right={dragMenuPosition.right}
+                  >
+                    <DragMenuLink>会員情報</DragMenuLink>
+                    <DragMenuLink>ツアー日程</DragMenuLink>
+                    <DragMenuLink onClick={logoutButtonHandler}>
+                      ログアウト
+                    </DragMenuLink>
+                  </DragDownMenu>
+                  </UserStyled>
+                </>
+              )}
+            </UserButton>
+            <NavIconContainer onClick={toggleMenuHandler}>
+              {!loggedIn ? (
+                <NavIconLink to="sign-up">
+                  <Redirect to="/home" />
+                  新規登録
+                </NavIconLink>
+              ) : (
+                <CartStyled>
+                  {" "}
+                  <h2>0</h2> <ShoppingCartOutlined fontSize="large" />{" "}
+                </CartStyled>
+              )}
               <NavIcons>
                 <a href={ins} rel="noreferrer" target="_blank">
                   <AiFillInstagram />
@@ -315,7 +422,7 @@ const Navbar = ({ openLoginHandler }) => {
                 <a href={fb} rel="noreferrer" target="_blank">
                   <AiFillFacebook />
                 </a>
-                <a href={yt}>
+                <a href={yt} rel="noreferrer " target="_blank">
                   <YouTube />
                 </a>
               </NavIcons>

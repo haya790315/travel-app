@@ -11,20 +11,20 @@ export const travelData = {
     },
     {
       id: "ok2",
-      title: "Sクラスレンタカー&朝食付！",
-      img: "https://www.his-j.com/kokunai/kanto/photo/item/okinawa/OKAQ17_NEWVIEW.jpg",
+      title: "【10月～1月出発】沖縄美ら海水族館入館券付",
+      img: "https://www.his-j.com/kokunai/kanto/photo/hispc/tour/OKAQ81_gaikan2.jpg",
       date: "2021/12/24",
-      des: "ヒルトンチョイス沖縄 3日間",
-      price: "33,600円 ",
-      duration: "三日間",
+      des: "うれしい滞在中夕食1回＆朝食付！さらにSクラスレンタカー付 全室オーシャンビューのリゾートホテル滞在",
+      price: "23,600",
+      duration: "2日間",
     },
     {
       id: "ok3",
       title: "ジェットスター・ジャパンで行く",
       img: "https://www.his-j.com/kokunai/kanto/photo/item/okinawa/OKA_adobe15.jpg",
       date: "2021/10/01",
-      des: "一度は泊まりたい世界ブランド　ヒルトンホテル滞在ヒルトンチョイス沖縄3日間",
-      price: "23,800円 ",
+      des: "一度は泊まりたい世界ブランド ヒルトンホテル滞在ヒルトンチョイス沖縄3日間",
+      price: "23,800",
       duration: "三日間",
     },
     {
@@ -74,5 +74,40 @@ export const travelData = {
       price: "31,800円  ",
       duration: "三日間",
     },
-  ],
+  ],kyusyuu:[
+    {
+      id:"ky1",
+      title: "5つ星の宿 阿蘇の司ビラパークホテル＆スパリゾートに滞在",
+      img:"https://www.his-j.com/kokunai/kanto/photo/hispc/tour/OITQKN_Onsen.jpg",
+      date:"2021/12/06",
+      des:"雄大な阿蘇の山々を見渡す5つ星の宿※1にも認定されたリゾートホテル",
+      price:"29800",
+      duration:"3日間"
+    },
+    {
+      id:"ky2",
+      title: "滞在中Sクラスレンタカー付！ ",
+      img:"https://www.his-j.com/kokunai/kanto/photo/hispc/tour/OIT_021.jpg",
+      date:"2022/1/06",
+      des:"別府湾を見渡す屋上展望露天風呂が自慢の宿「ホテル芳泉鶴」",
+      price:"27800",
+      duration:"2日間"
+    },{
+      id:"ky3",
+      title: "温泉宿・シティホテルを1泊ずつ組み合わせ可能",
+      img:"https://www.his-j.com/kokunai/kanto/photo/hispc/tour/OIT_167.jpg",
+      date:"2022/2/06",
+      des:"お土産などに使える1000円分のクーポン＆レンタカー付！Peachで行く 得タビ！",
+      price:"21800",
+      duration:"3日間"
+    },{
+      id:"ky4",
+      title: "滞在中Sクラスレンタカー付！",
+      img:"https://www.his-j.com/kokunai/kanto/photo/hispc/tour/OITKAK_ROTEN.jpg",
+      date:"2021/12/16",
+      des:"別府湾を見渡す屋上展望露天風呂が自慢の宿「ホテル芳泉鶴」と福岡随一の繁華街天神に位置する立地抜群「ベストウエスタンプラス福岡天神南」ホテルに滞在！",
+      price:"24800",
+      duration:"2日間"
+    }
+  ]
 };

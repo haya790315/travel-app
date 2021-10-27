@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { FavoriteBorder } from "@mui/icons-material";
-import { travelData } from "../../Data/data";
+import { FavoriteBorder ,Favorite} from "@mui/icons-material";
 import {Link} from "react-router-dom"
-import {flatten} from 'lodash'
-
+import { useAuthContext} from "../../AuthContext";
 const CardContainer = styled.div`
   height: 450px;
   width: 250px;
@@ -20,25 +18,26 @@ const CardContainer = styled.div`
 `;
 const Img = styled.img`
   overflow: hidden;
-  object-fit: contain;
+  object-fit: cover;
   height: 200px;
   width: 100%;
+  
 `;
 
 const CardContent = styled.div`
   margin-top: 0.3rem;
 `;
 const CardTitle = styled.div`
-  width: 100%;
+  width: 95%;
   height: auto;
   font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin: 10px 15px;
-  & h1 {
+  text-align: left;
+  & h4 {
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-weight: 600;
-    text-align: center;
   }
   & span {
     font-size: 14px;
@@ -49,18 +48,15 @@ const CardBody = styled.div`
   width: 100%;
   height: 80px;
   font-size: 0.9rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: --webkit-box;
-  --webkit-line-clamp: 3;
-  box-orient: vertical;
+  padding: 10px 10px;
   color: #404040;
+  text-align: left;
 `;
 const CardFooter = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin: 10px;
+  margin-top: 25px;
   & h4,
   span {
     color: #c52929;
@@ -78,16 +74,15 @@ const LinkStyled = styled(Link)`
 `
 
 
-function Card({ location }) {
+const  Card = ({ location }) => {
   
-
-
+  const auth = useAuthContext();
   
-  
-
   return (
     <>
       {location.map(({ title, img, date, des, price, duration,id }) => {
+        const heartAddedCondition = auth.heartAdded && auth.heartAdded.includes(id) ? <Favorite/> : <FavoriteBorder />
+        
         return (
           <LinkStyled to={"/products/"+id} key={id}>
             <CardContainer >
@@ -104,10 +99,10 @@ function Card({ location }) {
                 </CardBody>
               </CardContent>
               <CardFooter>
-                <h4>{price}</h4>
+                <h4>{price}円</h4>
                 <span>{duration}</span>
                 <span>
-                  <FavoriteBorder />
+                  {heartAddedCondition}
                 </span>
               </CardFooter>
             </CardContainer>

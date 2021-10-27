@@ -4,7 +4,7 @@ import { KeyboardArrowRight, KeyboardArrowLeft } from "@mui/icons-material";
 const ContainerSlider = styled.div`
   width: 90%;
   height: 300px;
-  margin: 100px auto ;
+  margin:100px  auto  80px  ;
   position: relative;
   align-items: center;
   overflow: hidden;
@@ -30,6 +30,7 @@ const Img = styled.img`
   object-fit: cover;
   &:hover{
     cursor: pointer;
+    
   }
 `;
 const ButtonContainer = styled.div`

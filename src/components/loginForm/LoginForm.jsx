@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import EmailInput from "./AccountInput";
 import PasswordInput from "./PasswordInput";
 import Modal from "./Modal";
 import { GrFormClose } from "react-icons/gr";
-import { useAuthContext } from "../../AuthContext";
 
 const FormContainer = styled.div`
   position: absolute;
@@ -104,13 +103,12 @@ const LoginForm = ({ closeLoginHandler }) => {
     password: "",
   });
 
-
   const toggleInputHandler = () => {
     setAccountIsEntered(!accountIsEntered);
   };
 
   const formEditHandler = (value) => {
-    setForm(value);
+        setForm(value);
   };
 
   const signUpButtonHandler = () => {

@@ -67,8 +67,9 @@ const PasswordInput = ({
 
   const { setUserInInfo, setLoggedIn } = useAuthContext();
 
-  const label = hasError ? "パスワードが正しくありません" : "パスワード";
+  const label = hasError ? "パスワードを入力ください" : "パスワード";
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     formEditHandler((prev) => ({
       ...prev,
@@ -78,16 +79,20 @@ const PasswordInput = ({
 
   const submitButtonHandler = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    
-    const loggedUser = user.find(({password,account})=>
-    password === editedForm.password && account === editedForm.account
+    const loggedUser = user.find(
+      ({ password, account }) =>
+        password === editedForm.password && account === editedForm.account
     );
-    if(loggedUser){
+    
+    if (loggedUser) {
       closeLoginHandler();
       setUserInInfo(loggedUser);
-      setLoggedIn(true)
+      setLoggedIn(true);
+    } else {
+      setErrorMessage("アカウントかパスワードが正しくありません。");
     }
   };
+  
   return (
     <FormControlUnstyled>
       <Box
@@ -125,4 +130,5 @@ const PasswordInput = ({
     </FormControlUnstyled>
   );
 };
+
 export default PasswordInput;

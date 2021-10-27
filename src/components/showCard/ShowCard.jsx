@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Card from "./Card";
 import { projectFirestore } from "../../firebase/config";
 import CircularProgress from "@mui/material/CircularProgress";
-// import { travelData } from "../../Data/data";
+import {Redirect} from "react-router-dom"
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,6 +20,7 @@ const Wrapper = styled.div`
     top: 0;
     left: 0;
   }
+
   @media screen and (max-width: 900px) {
     height: auto;
   }
@@ -49,86 +50,70 @@ const Spinner = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-function CardWrapper() {
-  const [travelData, setTravelData] = useState({});
+const CardWrapper = () => {
+  const [travelData, setTravelData] = useState();
+
   const [loading, setLoading] = useState(true);
 
-  
-  const fetchTravelData =　async () => {
-      const doc = await projectFirestore
+  const fetchTravelData = async () => {
+    const doc = await projectFirestore
       .collection("travelPlans")
       .doc("SSbyibFF1shnfxz38lDT")
       .get();
-      if (doc.data().travelData) {
-          setTravelData(doc.data().travelData);
-          setLoading(false)
-        }
-  };
-  useEffect(() => {
-    setLoading(true);
-    try{fetchTravelData()
-    }
-    catch(error){
+    try {
+      setTravelData(doc.data().travelData);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchTravelData();
   }, []);
 
+  if (loading) {
+    return (
+      <Wrapper>
+        <Spinner>
+          <CircularProgress disableShrink />;
+        </Spinner>
+      </Wrapper>
+    );
+  }
 
-  // if (!loading) {
-  //   return (
-  //     <Wrapper>
-  //       <Spinner>
-  //         <CircularProgress disableShrink />;
-  //       </Spinner>
-  //     </Wrapper>
-  //   );
-  // }
-
-  return (
-    <>
-      {loading ? (
-        <Wrapper>
-          <Spinner>
-            <CircularProgress disableShrink />;
-          </Spinner>
+  if (!loading && travelData) {
+    return (
+      <>
+        <Wrapper id="okinawa-section">
+          <h1>沖縄</h1>
+          <Container>
+            <Card location={travelData.okinawa} />
+          </Container>
         </Wrapper>
-      ) : (
-        <>
-          <Wrapper>
-            <h1>沖縄</h1>
-            <Container>
-              <Card location={travelData.okinawa} />
-            </Container>
-          </Wrapper>
+        <Wrapper id="hokkaidou-section">
+          <h1>北海道</h1>
+          <Container>
+            <Card location={travelData.hokkaidou} />
+          </Container>
+        </Wrapper>
+        <Wrapper id="kyusyuu-section">
+          <h1>九州</h1>
+          <Container>
+            <Card location={travelData.kyusyuu} />
+          </Container>
+        </Wrapper>
+      </>
+    );
+  }
 
-          <Wrapper>
-            <h1>北海道</h1>
-            <Container>
-              <Card location={travelData.hokkaidou} />
-            </Container>
-          </Wrapper>
-        </>
-      )}
-    </>
-  );
+  if (!loading && !travelData) {
+    return (
+      <Redirect to="/error"/>
+    );
+  }
 
-  // return (
-  //   <>
-  //     <Wrapper>
-  //       <h1>沖縄</h1>
-  //       <Container>
-  //         <Card location={travelData.okinawa} />
-  //       </Container>
-  //     </Wrapper>
-
-  //     <Wrapper>
-  //       <h1>北海道</h1>
-  //       <Container>
-  //         <Card location={travelData.hokkaidou} />
-  //       </Container>
-  //     </Wrapper>
-  //   </>
-  // );
-}
+};
 
 export default CardWrapper;

@@ -8,7 +8,7 @@ const BackdropStyle = styled.div`
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 20;
+  z-index: 40;
   background-color: rgba(0, 0, 0, 0.75);
 `;
 const ModalContainer = styled.div`
@@ -19,7 +19,7 @@ const ModalContainer = styled.div`
 
 const ModalStyled = styled.div`
   position: fixed;
-  z-index: 30;
+  z-index: 50;
   height: 300px;
   width: 250px;
   transform: translate(-50%, -50%);
@@ -31,8 +31,6 @@ const Backdrop = ({ closeLoginHandler }) => {
 };
 
 const LoginModal = (props) => {
-  
-
   return (
     <ModalContainer>
       <ModalStyled

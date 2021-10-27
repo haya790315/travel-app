@@ -15,8 +15,8 @@ const CardContainer  = styled.div `
   background-color: #9e9e9eed;
   border:1px solid #ffff;
   border-radius: 10px;
-  transform: ${({open})=>open ? "translateY(0)" : "translateY(100%)"};
-  animation:  ${({open})=>open ? "fadeIn-keyframes 1s linear" : ""};
+  transform: ${({showCompleted})=>showCompleted ? "translateY(0)" : "translateY(100%)"};
+  animation:  ${({showCompleted})=>showCompleted ? "fadeIn-keyframes 1s linear" : ""};
   @keyframes fadeIn-keyframes {
     0% {
       transform: translateY(100%);
@@ -42,7 +42,7 @@ const ChangePageTitle = styled.p`
   }
 `
 
-const SignUpCompletedCard = ({open}) => {
+const SignUpCompletedCard = ({showCompleted}) => {
   const [countDownNumber,setCountDownNumber] =useState(6)
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const SignUpCompletedCard = ({open}) => {
   }
   
   return (
-    <CardContainer open={open}>
+    <CardContainer showCompleted={showCompleted}>
       <Heading>
         登録が完了しました
       </Heading>

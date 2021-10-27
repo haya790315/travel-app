@@ -22,13 +22,13 @@ const ErrorMessage = styled.p`
 `;
 
 const Input = ({
+  type,
   id,
   name,
-  type,
-  onChangeFunction,
+  placeholder,
   value,
   validator,
-  placeholder,
+  onChangeFunction,
   disabled,
 }) => {
   const [touched, setTouched] = useState(false);

@@ -1,7 +1,8 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import MemberInformationForm  from "./MemberInformationForm";
+import SetAccountForm from "./SetAccountForm";
 import SignUpCompletedCard from "./SignUpCompletedCard";
+import UserInfoForm from "./UserInfoForm";
 
 const FormWrapper = styled.div`
   position: relative;
@@ -12,7 +13,8 @@ const FormWrapper = styled.div`
   width: 100vw;
   height: 1000px;
   background-color: #ffffff;
-  animation:${({open})=>open ? "fade-keyframes 2s forwards" : ""}  ;
+  animation: ${({ showCompleted }) =>
+    showCompleted ? "fade-keyframes 2s forwards" : ""};
 
   @keyframes fade-keyframes {
     0% {
@@ -22,7 +24,6 @@ const FormWrapper = styled.div`
       opacity: 0;
     }
   }
-
 `;
 
 const Navbar = styled.div`
@@ -57,18 +58,48 @@ const Heading = styled.h1`
 `;
 
 const SignUpForm = () => {
-  const [open , setOpen] = useState(false)
-  
-  
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [formToggle, setFormToggle] = useState(false);
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    birthday: "",
+    gender: "",
+    email: "",
+    account: "",
+    password: "",
+  });
+  const setFormHandler = (userInfo) => {
+    setForm(userInfo);
+  };
+
+  const formChangeHandler = () => {
+    setFormToggle((prev) => !prev);
+  };
+
+  const formState = formToggle ?  (
+    <SetAccountForm
+      form={form}
+      setFormHandler={setFormHandler}
+      formChangeHandler={formChangeHandler}
+      setShowCompleted={setShowCompleted}
+    /> ):(
+      <UserInfoForm
+        form={form}
+        setFormHandler={setFormHandler}
+        formChangeHandler={formChangeHandler}
+      />
+    ) ;
+
   return (
     <>
-    <FormWrapper open={open}>
-      <Navbar>
-        <Heading>新規登録</Heading>
-      </Navbar>
-      <MemberInformationForm setOpen={setOpen}/>
-    </FormWrapper>
-    { open && <SignUpCompletedCard open={open}/>}
+      <FormWrapper showCompleted={showCompleted}>
+        <Navbar>
+          <Heading>新規登録</Heading>
+        </Navbar>
+        {formState}
+      </FormWrapper>
+      {showCompleted && <SignUpCompletedCard showCompleted={showCompleted} />}
     </>
   );
 };

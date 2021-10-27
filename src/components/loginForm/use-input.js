@@ -4,7 +4,6 @@ const useInput = (checkFunction) => {
   const [enteredValue,setEnteredValue] = useState('');
   const [isTouched,setIsTouched] = useState(false);
 
-
   const validateValue = checkFunction(enteredValue);
   const hasError = !validateValue && isTouched;
   
@@ -15,8 +14,6 @@ const useInput = (checkFunction) => {
   const inputIsTouched = ()=>{
     setIsTouched(true)
   }
-  
-
 
   return {
     value:enteredValue,
@@ -25,10 +22,6 @@ const useInput = (checkFunction) => {
     valueChangeHandler,
     inputIsTouched
   }
-  
-  
-  
-  
   
 }
 
