@@ -78,7 +78,7 @@ const Button = styled.button`
   font-size: ${({ bg }) => (bg ? "1.2rem" : "0.8rem")};
   border-radius: 3px;
   margin-bottom: 20px;
-  background-color: ${({ bg }) => (bg ? "#FF9501" : "#75B346")};
+  background-color: ${({ bg }) => (bg ? "#fca966" : "#a7fc66")};
   box-shadow: 0px 14px 11px -9px #000000;
   padding: ${({ bg }) => (bg ? "1rem 0" : "0.2rem 0")};
   cursor: pointer;
@@ -97,6 +97,14 @@ const DescriptionLeft = styled.div`
   margin-bottom: 15px;
   & h4 {
     color: #4d43db;
+  }
+  & input{
+    outline: solid 2px #3894fd;
+    background: transparent;
+    border-radius: 2px;
+    border: none;
+    color:#3894fd;
+    cursor: pointer;
   }
 `;
 
@@ -159,6 +167,9 @@ const Detail = () => {
       setHeartAdded(true);
     }
   };
+
+  
+
 
   const setNewUserInformation = () => {
     const users = JSON.parse(localStorage.getItem("user"));
@@ -270,10 +281,12 @@ const Detail = () => {
           <Title>{data.title}</Title>
           <Description>
             <DescriptionLeft>
-              <span>
+              <div>
                 <h4>【出発日】</h4>
-                {data.date} <h4>【人数】</h4> 2名1室
-              </span>
+                <input type="date" /> 
+                <h4>【人数】</h4>
+                <input type="number" max="4" min="1"　defaultValue="2"/> 人
+              </div>
               <MoneyPartStyled>
                 <span>大人1名様</span> <p>旅行代金 {data.price}</p>
               </MoneyPartStyled>

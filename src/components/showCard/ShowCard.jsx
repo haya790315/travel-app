@@ -72,7 +72,6 @@ const CardWrapper = () => {
   useEffect(() => {
     fetchTravelData();
   }, []);
-
   if (loading) {
     return (
       <Wrapper>

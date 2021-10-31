@@ -286,14 +286,29 @@ const DragMenuLink = styled.li`
 `;
 
 const CartStyled = styled.div`
-  color: #fff;
+  color: #eee;
   font-size: 16px;
   margin-left: 20px;
   cursor: pointer;
   font-weight: 600;
   text-align: center;
+  &::before{
+    content: "";
+    background-color: red;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    transform: translate(-110%,100%);
+    position: absolute;
+
+  }
   &:hover {
-    color: #eeee;
+    color: #fff;
+  }
+  & h2 {
+    transform: translate(-15%,40%);
+    text-align: center;
   }
   & p {
     display: inline-block;
@@ -394,6 +409,7 @@ const Navbar = ({ openLoginHandler }) => {
                     right={dragMenuPosition.right}
                   >
                     <DragMenuLink>会員情報</DragMenuLink>
+                    <DragMenuLink>カート</DragMenuLink>
                     <DragMenuLink>ツアー日程</DragMenuLink>
                     <DragMenuLink onClick={logoutButtonHandler}>
                       ログアウト
@@ -411,8 +427,8 @@ const Navbar = ({ openLoginHandler }) => {
                 </NavIconLink>
               ) : (
                 <CartStyled>
-                  {" "}
-                  <h2>0</h2> <ShoppingCartOutlined fontSize="large" />{" "}
+                  <h2>0</h2> <ShoppingCartOutlined fontSize="large" />
+                  <p>カート</p>
                 </CartStyled>
               )}
               <NavIcons>

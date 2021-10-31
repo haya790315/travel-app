@@ -1,7 +1,7 @@
-import React, { useState , useRef} from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Navbar, LoginForm } from "./components";
-import { Home, SignUp, Description,ErrorPage } from "./page";
+import { Home,SignUp, Description, ErrorPage, CartPage } from "./page";
 function App() {
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const openLoginHandler = () => {
@@ -10,26 +10,35 @@ function App() {
   const closeLoginHandler = () => {
     setOpenLoginForm(false);
   };
-  
 
   return (
-    <div className="wrapper" >
+    <div className="wrapper">
       <Router>
         <Navbar openLoginHandler={openLoginHandler} />
         {openLoginForm && <LoginForm closeLoginHandler={closeLoginHandler} />}
         <Switch>
-          <Route exact path="/home" >
+          <Route path="/home">
             <Home />
           </Route>
-          <Route exact path="/products/:number">
+          <Route path="/products/:number">
             <Description />
           </Route>
-          <Route exact path="/sign-up">
+          <Route path="/sign-up">
             <SignUp />
           </Route>
-          <Route path="/error">
-            <ErrorPage/>
+          <Route exact path="/cart-page">
+            <CartPage />
           </Route>
+          <Route path="/aboard">
+          </Route>
+          <Route path="/cart">
+          <CartPage />
+          </Route>
+          <Route path="/error">
+            <ErrorPage />
+          </Route>
+          {/* <Route to="/">
+          </Route> */}
         </Switch>
       </Router>
     </div>
