@@ -30,7 +30,6 @@ const AccountInput = ({ toggleInputHandler, formEditHandler }) => {
   const { value, isValid, hasError, valueChangeHandler, inputIsTouched } =
     useInput((value)=>value.trim()!=="" && value.trim()>8);
   const label = hasError ? "アカウントを入力ください" : "アカウント";
-
   const nextButtonHandler = () => {
     toggleInputHandler();
     formEditHandler((prev) => ({ ...prev, account: value }));

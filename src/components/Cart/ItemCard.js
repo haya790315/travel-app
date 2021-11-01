@@ -3,6 +3,8 @@ import styled from "styled-components";
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import PeopleIcon from '@mui/icons-material/People';
+import { useAuthContext } from "../../Contexts/AuthContext";
+import {flatten} from "lodash"
 const CardWrapper = styled.div`
   display: flex;
   border: 1px solid #eeee;
@@ -89,15 +91,22 @@ const ButtonStyled = styled.div`
 `;
 
 
-const ItemCard = () => {
+const ItemCard = ({cartItem}) => {
+  const {id,img,title,price} = cartItem;
+  
+  const authContext = useAuthContext();
+  
+  const {date,people} = authContext.cart.find(item=>item.id===id);
+  
+  
   return (
-    <CardWrapper>
-      <ItemImg src="https://static-buyma-com.akamaized.net/imgdata/item/200308/0052169644/397569464/210.jpg"></ItemImg>
+    <CardWrapper key={id}>
+      <ItemImg src={img}></ItemImg>
       <Main>
-        <Title><FlightTakeoffIcon style={{marginRight:"5px"}}/>沖縄旅</Title>
-        <Price>￥12000円</Price>
-        <Date><EventAvailableIcon style={{marginRight:"5px"}}/>2021/12/16</Date>
-        <Member><PeopleIcon style={{marginRight:"5px"}}/>3人</Member>
+        <Title><FlightTakeoffIcon style={{marginRight:"5px"}}/>{title}</Title>
+        <Price>￥{price}</Price>
+        <Date><EventAvailableIcon style={{marginRight:"5px"}}/>{date}</Date>
+        <Member><PeopleIcon style={{marginRight:"5px"}}/>{people}</Member>
       </Main>
       <RightSection>
       <ButtonStyled>変更<div/></ButtonStyled>

@@ -26,19 +26,16 @@ function App() {
           <Route path="/sign-up">
             <SignUp />
           </Route>
-          <Route exact path="/cart-page">
-            <CartPage />
-          </Route>
           <Route path="/aboard">
           </Route>
-          <Route path="/cart">
+          <Route path="/cart-page">
           <CartPage />
           </Route>
           <Route path="/error">
             <ErrorPage />
           </Route>
-          {/* <Route to="/">
-          </Route> */}
+          <Route to="/">
+          </Route>
         </Switch>
       </Router>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FavoriteBorder ,Favorite} from "@mui/icons-material";
 import {Link} from "react-router-dom"
-import { useAuthContext} from "../../AuthContext";
+import { useAuthContext} from "../../Contexts/AuthContext";
 const CardContainer = styled.div`
   height: 450px;
   width: 250px;

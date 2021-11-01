@@ -68,6 +68,7 @@ const SignUpForm = () => {
     email: "",
     account: "",
     password: "",
+    cart:[]
   });
   const setFormHandler = (userInfo) => {
     setForm(userInfo);

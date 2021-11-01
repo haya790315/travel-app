@@ -2,26 +2,28 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { flatten } from "lodash";
-import { projectFirestore } from "../../firebase/config";
 import CircularProgress from "@mui/material/CircularProgress";
 import { BiHeart } from "react-icons/bi";
-import {FaHeart} from "react-icons/fa"
-import { useAuthContext } from "../../AuthContext";
+import { FaHeart } from "react-icons/fa";
+import { useAuthContext } from "../../Contexts/AuthContext";
+import { useTravelDataContext } from "../../Contexts/TravelContext";
+import {useHistory} from "react-router-dom"
 
 const Img = styled.div`
-  background: url("https://www.his-j.com/fair/autumn/kanto/assets/common/images/bnr_autumn960.jpg") no-repeat;
+  background: url("https://www.his-j.com/fair/autumn/kanto/assets/common/images/bnr_autumn960.jpg")
+    no-repeat;
   width: 100%;
   height: 100%;
   cursor: pointer;
   background-size: cover;
   background-position: center;
-  &:hover{ 
-    transition: all .5s;
+  &:hover {
+    transition: all 0.5s;
     transform: scale(1.1);
   }
 `;
 
-const ImgContainer = styled.div `
+const ImgContainer = styled.div`
   position: absolute;
   display: block;
   height: 100px;
@@ -29,11 +31,10 @@ const ImgContainer = styled.div `
   top: 20%;
   left: 8%;
   overflow: hidden;
-  @media screen and (max-width:900px){
+  @media screen and (max-width: 900px) {
     width: 450px;
-    
   }
-`
+`;
 
 const Container = styled.div`
   position: absolute;
@@ -98,12 +99,12 @@ const DescriptionLeft = styled.div`
   & h4 {
     color: #4d43db;
   }
-  & input{
+  & input {
     outline: solid 2px #3894fd;
     background: transparent;
     border-radius: 2px;
     border: none;
-    color:#3894fd;
+    color: #3894fd;
     cursor: pointer;
   }
 `;
@@ -134,43 +135,37 @@ const DescriptionRight = styled.div`
   justify-content: center;
   align-items: center;
   flex: 1;
-`;
+  `;
 
 const Spinner = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-`;
+  `;
 
 const Detail = () => {
   const [loading, setLoading] = useState(true);
   const [heartAdded, setHeartAdded] = useState(false);
+  const [date, setDate] = useState();
+  const [people, setPeople] = useState(2);
   const userContext = useAuthContext();
+  const travelDataContext = useTravelDataContext();
   const detailParams = useParams();
-
   const [travelData, setTravelData] = useState({});
+  const history = useHistory();
+  
+  
 
-  const fetchTravelData = async () => {
-    const doc = await projectFirestore
-      .collection("travelPlans")
-      .doc("SSbyibFF1shnfxz38lDT")
-      .get();
-    if (doc.data().travelData) {
-      setTravelData(doc.data().travelData);
-      setLoading(false);
-    }
-  };
-
-  const heartList = () => {
-    if (userContext.heartAdded && userContext.heartAdded.includes(`${detailParams.number}`)) {
+  const handleHeartList = () => {
+    if (
+      userContext.heartAdded &&
+      userContext.heartAdded.includes(`${detailParams.number}`)
+    ) {
       setHeartAdded(true);
     }
   };
-
   
-
-
   const setNewUserInformation = () => {
     const users = JSON.parse(localStorage.getItem("user"));
     const newUsers = users.map((user) => {
@@ -183,6 +178,7 @@ const Detail = () => {
         gender,
         lastName,
         heartAdded,
+        cart,
       } = userContext;
       if (user.account === userContext.account) {
         return {
@@ -194,6 +190,7 @@ const Detail = () => {
           gender,
           lastName,
           heartAdded,
+          cart,
         };
       } else {
         return user;
@@ -203,25 +200,26 @@ const Detail = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    try {
-      fetchTravelData()
-    } catch (error) {
-      setLoading(false);
-    }
-    heartList();
+    setTravelData(travelDataContext.travelData);
+    setLoading(travelDataContext.isLoading);
+    handleHeartList();
   }, []);
 
   const dataDetail = flatten(Object.values(travelData));
+  const data = dataDetail.find((item) => item.id === detailParams.number);
+  const cartAddButtonHandler = () => {
+    if (!userContext) return;
+    const prevCart = userContext.cart.filter((item) => item.id !== data.id);
+    
+    userContext.setUserInInfo ({...userContext,cart:[...prevCart,{ id: data.id, date: date, people: people }]})
 
-  const data = dataDetail.find((item) => {
-    if (item.id === detailParams.number) {
-      return item;
-    }
-  });
+    setNewUserInformation();
+    
+    history.push("/cart-page")
+  };
 
   const heartAddButtonHandler = () => {
-    if(!userContext.account) return
+    if (!userContext.account) return;
     if (userContext.heartAdded) {
       userContext.heartAdded.push(`${data.id}`);
     } else {
@@ -232,7 +230,7 @@ const Detail = () => {
   };
 
   const heartDeleteButtonHandler = () => {
-    if(!userContext.account) return
+    if (!userContext.account) return;
 
     const newHeartList = userContext.heartAdded.filter(
       (item) => item !== data.id
@@ -248,7 +246,7 @@ const Detail = () => {
         heartDeleteButtonHandler();
       }}
     >
-      <FaHeart/>
+      <FaHeart />
     </StarButton>
   ) : (
     <StarButton
@@ -273,7 +271,7 @@ const Detail = () => {
   return (
     <>
       <ImgContainer>
-      <Img ></Img>
+        <Img></Img>
       </ImgContainer>
       <Container>
         <Heading>お問い合わせ番号:{data.id}</Heading>
@@ -283,9 +281,16 @@ const Detail = () => {
             <DescriptionLeft>
               <div>
                 <h4>【出発日】</h4>
-                <input type="date" /> 
+                <input type="date" onChange={(e) => setDate(e.target.value)} />
                 <h4>【人数】</h4>
-                <input type="number" max="4" min="1"　defaultValue="2"/> 人
+                <input
+                  type="number"
+                  max="4"
+                  min="1"
+                  onChange={(e) => setPeople(e.target.value)}
+                  value={people}
+                />{" "}
+                人
               </div>
               <MoneyPartStyled>
                 <span>大人1名様</span> <p>旅行代金 {data.price}</p>
@@ -293,7 +298,9 @@ const Detail = () => {
             </DescriptionLeft>
             <DescriptionRight>
               <Button bg>空室確認</Button>
-              <Button>ショッピングカートに入れます</Button>
+              <Button onClick={cartAddButtonHandler}>
+                ショッピングカートに入れます
+              </Button>
               {heartButtonCondition}
             </DescriptionRight>
           </Description>

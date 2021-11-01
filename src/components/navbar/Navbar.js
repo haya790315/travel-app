@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 import { FaTimes, FaBars } from "react-icons/fa";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AiFillInstagram, AiFillFacebook } from "react-icons/ai";
 import {
   TravelExplore,
@@ -12,7 +12,7 @@ import {
 } from "@mui/icons-material";
 import logo from "../../image/logo.png";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../AuthContext";
+import { useAuthContext } from "../../Contexts/AuthContext";
 const Nav = styled.nav`
   width: 100%;
   background: black;
@@ -258,8 +258,8 @@ const DragDownMenu = styled.ul`
   border-radius: 5px;
   left: ${(left) => left}px;
   top: ${(top) => top}px;
-  transform:translate(-60%, -5%);
-  opacity:${({ show }) => (show ? "0.9" : "0")};
+  transform: translate(-60%, -5%);
+  opacity: ${({ show }) => (show ? "0.9" : "0")};
   flex-direction: column;
   justify-content: flex-end;
   transition: 0.5s all ease-in-out;
@@ -285,29 +285,29 @@ const DragMenuLink = styled.li`
   }
 `;
 
-const CartStyled = styled.div`
+const CartLinkStyled = styled(Link)`
+  text-decoration: none;
   color: #eee;
   font-size: 16px;
   margin-left: 20px;
   cursor: pointer;
   font-weight: 600;
   text-align: center;
-  &::before{
+  &::before {
     content: "";
     background-color: red;
     border-radius: 50%;
     height: 20px;
     width: 20px;
     display: inline-block;
-    transform: translate(-110%,100%);
+    transform: translate(-110%, 100%);
     position: absolute;
-
   }
   &:hover {
     color: #fff;
   }
   & h2 {
-    transform: translate(-15%,40%);
+    transform: translate(-15%, 40%);
     text-align: center;
   }
   & p {
@@ -322,16 +322,18 @@ const Navbar = ({ openLoginHandler }) => {
   const [sideMenu, setSideMenu] = useState(false);
   const [showDragMenu, setShowDragMenu] = useState(false);
   const [dragMenuPosition, setDragMenuPosition] = useState({});
-  const { loggedIn, firstName, lastName, setLoggedIn, setUserInInfo } =
-    useAuthContext();
+  const history = useHistory()
+  const { loggedIn, firstName, lastName, setLoggedIn, setUserInInfo,cart} =  useAuthContext();
+
+
+  
   const ins = "https://about.instagram.com/ja-jp";
   const fb = "https://www.facebook.com/";
   const yt = "https://www.youtube.com/";
-  console.log(dragMenuPosition);
   const toggleMenuHandler = () => {
     setSideMenu((prevState) => !prevState);
   };
-
+  
   const loginButtonHandler = () => {
     setSideMenu(false);
     openLoginHandler();
@@ -341,6 +343,7 @@ const Navbar = ({ openLoginHandler }) => {
   const logoutButtonHandler = () => {
     setLoggedIn(false);
     setUserInInfo({});
+    history.push("/home");
   };
 
   const dragDownMenuHandler = () => {
@@ -402,34 +405,33 @@ const Navbar = ({ openLoginHandler }) => {
                     id="user_section"
                   >
                     {firstName + lastName}
-                  <DragDownMenu
-                    show={showDragMenu}
-                    top={dragMenuPosition.top}
-                    left={dragMenuPosition.left}
-                    right={dragMenuPosition.right}
-                  >
-                    <DragMenuLink>会員情報</DragMenuLink>
-                    <DragMenuLink>カート</DragMenuLink>
-                    <DragMenuLink>ツアー日程</DragMenuLink>
-                    <DragMenuLink onClick={logoutButtonHandler}>
-                      ログアウト
-                    </DragMenuLink>
-                  </DragDownMenu>
+                    <DragDownMenu
+                      show={showDragMenu}
+                      top={dragMenuPosition.top}
+                      left={dragMenuPosition.left}
+                      right={dragMenuPosition.right}
+                    >
+                      <DragMenuLink>会員情報</DragMenuLink>
+                      <DragMenuLink>カート</DragMenuLink>
+                      <DragMenuLink>ツアー日程</DragMenuLink>
+                      <DragMenuLink onClick={logoutButtonHandler}>
+                        ログアウト
+                      </DragMenuLink>
+                    </DragDownMenu>
                   </UserStyled>
                 </>
               )}
             </UserButton>
             <NavIconContainer onClick={toggleMenuHandler}>
               {!loggedIn ? (
-                <NavIconLink to="sign-up">
-                  <Redirect to="/home" />
-                  新規登録
-                </NavIconLink>
+                
+                  <NavIconLink to="/sign-up">新規登録</NavIconLink>
+                
               ) : (
-                <CartStyled>
-                  <h2>0</h2> <ShoppingCartOutlined fontSize="large" />
+                <CartLinkStyled to="/cart-page">
+                  <h2>{cart.length}</h2> <ShoppingCartOutlined fontSize="large" />
                   <p>カート</p>
-                </CartStyled>
+                </CartLinkStyled>
               )}
               <NavIcons>
                 <a href={ins} rel="noreferrer" target="_blank">

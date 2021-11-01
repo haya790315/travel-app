@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { AuthContextProvider } from "./AuthContext";
+import { AuthContextProvider } from "./Contexts/AuthContext";
+import { TravelContextProvider } from "./Contexts/TravelContext";
 ReactDOM.render(
   <React.StrictMode>
-    <AuthContextProvider>
+    <TravelContextProvider>
+      <AuthContextProvider>
         <App />
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </TravelContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

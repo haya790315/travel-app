@@ -3,7 +3,7 @@ import { TextField, Box } from "@mui/material";
 import { FormControlUnstyled } from "@mui/core";
 import useInput from "./use-input";
 import styled from "styled-components";
-import { useAuthContext } from "../../AuthContext";
+import { useAuthContext } from "../../Contexts/AuthContext";
 
 const SubmitButton = styled.button`
   width: 300px;
