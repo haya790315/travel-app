@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, LoginForm } from "./components";
-import { Home,SignUp, Description, ErrorPage, CartPage } from "./page";
+import { Home,SignUp, DescriptionPage, ErrorPage, CartPage,PreHomePage } from "./page";
 function App() {
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const openLoginHandler = () => {
@@ -16,27 +16,15 @@ function App() {
       <Router>
         <Navbar openLoginHandler={openLoginHandler} />
         {openLoginForm && <LoginForm closeLoginHandler={closeLoginHandler} />}
-        <Switch>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/products/:number">
-            <Description />
-          </Route>
-          <Route path="/sign-up">
-            <SignUp />
-          </Route>
-          <Route path="/aboard">
-          </Route>
-          <Route path="/cart-page">
-          <CartPage />
-          </Route>
-          <Route path="/error">
-            <ErrorPage />
-          </Route>
-          <Route to="/">
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/home" element={<Home />}/>
+          <Route path="/products/:number" element={<DescriptionPage openLoginHandler={openLoginHandler}/>}/>
+          <Route path="/sign-up" element={<SignUp />}/>
+          <Route path="/aboard"/>
+          <Route path="/cart-page" element={<CartPage />}/>
+          <Route path="/error" element={<ErrorPage />}/>
+          <Route path="/" element={<PreHomePage/>}/>
+        </Routes>
       </Router>
     </div>
   );

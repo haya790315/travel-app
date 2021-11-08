@@ -7,7 +7,8 @@ import { BiHeart } from "react-icons/bi";
 import { FaHeart } from "react-icons/fa";
 import { useAuthContext } from "../../Contexts/AuthContext";
 import { useTravelDataContext } from "../../Contexts/TravelContext";
-import {useHistory} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
+import setNewUserInformation from "../../Hook/useSetNewUserInformation";
 
 const Img = styled.div`
   background: url("https://www.his-j.com/fair/autumn/kanto/assets/common/images/bnr_autumn960.jpg")
@@ -144,7 +145,7 @@ const Spinner = styled.div`
   transform: translate(-50%, -50%);
   `;
 
-const Detail = () => {
+const Detail = ({openLoginHandler}) => {
   const [loading, setLoading] = useState(true);
   const [heartAdded, setHeartAdded] = useState(false);
   const [date, setDate] = useState();
@@ -153,7 +154,10 @@ const Detail = () => {
   const travelDataContext = useTravelDataContext();
   const detailParams = useParams();
   const [travelData, setTravelData] = useState({});
-  const history = useHistory();
+  
+  
+  const navigate = useNavigate();
+  
   
   
 
@@ -166,39 +170,41 @@ const Detail = () => {
     }
   };
   
-  const setNewUserInformation = () => {
-    const users = JSON.parse(localStorage.getItem("user"));
-    const newUsers = users.map((user) => {
-      const {
-        account,
-        password,
-        birthday,
-        email,
-        firstName,
-        gender,
-        lastName,
-        heartAdded,
-        cart,
-      } = userContext;
-      if (user.account === userContext.account) {
-        return {
-          account,
-          password,
-          birthday,
-          email,
-          firstName,
-          gender,
-          lastName,
-          heartAdded,
-          cart,
-        };
-      } else {
-        return user;
-      }
-    });
-    localStorage.setItem("user", JSON.stringify(newUsers));
-  };
+  // const setNewUserInformation = () => {
+  //   const users = JSON.parse(localStorage.getItem("user"));
+  //   const newUsers = users.map((user) => {
+  //     const {
+  //       account,
+  //       password,
+  //       birthday,
+  //       email,
+  //       firstName,
+  //       gender,
+  //       lastName,
+  //       heartAdded,
+  //       cart,
+  //     } = userContext;
+  //     if (user.account === userContext.account) {
+  //       return {
+  //         account,
+  //         password,
+  //         birthday,
+  //         email,
+  //         firstName,
+  //         gender,
+  //         lastName,
+  //         heartAdded,
+  //         cart,
+  //       };
+  //     } else {
+  //       return user;
+  //     }
+  //   });
+  //   localStorage.setItem("user", JSON.stringify(newUsers));
+  // };
+  
 
+  
   useEffect(() => {
     setTravelData(travelDataContext.travelData);
     setLoading(travelDataContext.isLoading);
@@ -207,36 +213,44 @@ const Detail = () => {
 
   const dataDetail = flatten(Object.values(travelData));
   const data = dataDetail.find((item) => item.id === detailParams.number);
-  const cartAddButtonHandler = () => {
-    if (!userContext) return;
-    const prevCart = userContext.cart.filter((item) => item.id !== data.id);
-    
-    userContext.setUserInInfo ({...userContext,cart:[...prevCart,{ id: data.id, date: date, people: people }]})
 
-    setNewUserInformation();
-    
-    history.push("/cart-page")
+  const cartAddButtonHandler = () => {
+    if (!userContext.loggedIn){
+      openLoginHandler(true)
+    } else{
+      const prevCart = userContext.cart.filter((item) => item.id !== data.id);
+      
+      userContext.setUserInInfo ({...userContext,cart:[...prevCart,{ id: data.id, date: date, people: people }]})
+      
+      
+      navigate("/cart-page")
+    }
   };
 
   const heartAddButtonHandler = () => {
-    if (!userContext.account) return;
-    if (userContext.heartAdded) {
-      userContext.heartAdded.push(`${data.id}`);
-    } else {
-      userContext.heartAdded = [`${data.id}`];
+    if (!userContext.loggedIn) {
+      openLoginHandler(true);
+
+    }else{
+
+      if (userContext.heartAdded) {
+        userContext.heartAdded.push(`${data.id}`);
+      } else {
+        userContext.heartAdded = [`${data.id}`];
+      }
+      setHeartAdded(true);
+      setNewUserInformation(userContext);
     }
-    setHeartAdded(true);
-    setNewUserInformation();
   };
 
   const heartDeleteButtonHandler = () => {
-    if (!userContext.account) return;
+    if (!userContext.loggedIn) return;
 
     const newHeartList = userContext.heartAdded.filter(
       (item) => item !== data.id
     );
     userContext.heartAdded = newHeartList;
-    setNewUserInformation();
+    setNewUserInformation(userContext);
     setHeartAdded(false);
   };
 

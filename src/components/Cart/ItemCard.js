@@ -4,11 +4,13 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import PeopleIcon from '@mui/icons-material/People';
 import { useAuthContext } from "../../Contexts/AuthContext";
-import {flatten} from "lodash"
+import {useNavigate} from "react-router-dom"
+
 const CardWrapper = styled.div`
   display: flex;
   border: 1px solid #eeee;
   margin-bottom: 20px;
+
 `;
 
 const ItemImg = styled.img`
@@ -55,7 +57,8 @@ const Member = styled.div`
 
 const RightSection = styled.div `
   flex:1;
-
+  box-sizing: border-box;
+  overflow: hidden;
 `
 
 
@@ -86,17 +89,37 @@ const ButtonStyled = styled.div`
     outline: 2px solid khaki;
 
   }
-
+  
 
 `;
 
+const TravelId = styled.div`
+  position: absolute;
+    float: right;
+    text-align: center;
+    background-color:#fffce0eb ;
+  width: 90px;
+  color:#000000;
+  font-weight: 600;
+  font-size: 0.9rem;
+`
 
-const ItemCard = ({cartItem}) => {
+
+
+const ItemCard = ({cartItem,deleteButtonHandler}) => {
   const {id,img,title,price} = cartItem;
   
   const authContext = useAuthContext();
   
   const {date,people} = authContext.cart.find(item=>item.id===id);
+
+  const navigate = useNavigate();
+  
+  const editButtonHandler = ()=>{
+    navigate(`/products/${id}`)
+  }
+
+  let  totalPrice = Number(price)*people;
   
   
   return (
@@ -104,16 +127,17 @@ const ItemCard = ({cartItem}) => {
       <ItemImg src={img}></ItemImg>
       <Main>
         <Title><FlightTakeoffIcon style={{marginRight:"5px"}}/>{title}</Title>
-        <Price>￥{price}</Price>
         <Date><EventAvailableIcon style={{marginRight:"5px"}}/>{date}</Date>
         <Member><PeopleIcon style={{marginRight:"5px"}}/>{people}</Member>
+        <Price>￥{totalPrice}</Price>
       </Main>
       <RightSection>
-      <ButtonStyled>変更<div/></ButtonStyled>
-      <ButtonStyled>削除<div/></ButtonStyled>
+      <ButtonStyled onClick={editButtonHandler}>変更<div/></ButtonStyled>
+      <ButtonStyled onClick={()=>deleteButtonHandler(id)}>削除<div/></ButtonStyled>
       <ButtonStyled>詳細<div/></ButtonStyled>
 
       </RightSection>
+      <TravelId>番号:{id}</TravelId>
     </CardWrapper>
   );
 };

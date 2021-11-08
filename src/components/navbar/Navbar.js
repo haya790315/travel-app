@@ -1,7 +1,7 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FaTimes, FaBars } from "react-icons/fa";
-import { useHistory } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AiFillInstagram, AiFillFacebook } from "react-icons/ai";
 import {
   TravelExplore,
@@ -129,7 +129,7 @@ const NavMenu = styled.ul`
     height: 90vh;
     position: absolute;
     top: 80px;
-    left: ${({ click }) => (click ? 0 : "-100%")};
+    left: ${({ click }) => (click ? 0 : "-130%")};
     opacity: 1;
     transition: all 0.5s ease-in-out;
     background: #101522;
@@ -271,18 +271,20 @@ const DragDownMenu = styled.ul`
     background: transparent;
   }
 `;
-const DragMenuLink = styled.li`
+const DragMenuLink = styled(Link)`
   height: 40px;
   width: 100%;
   font-weight: 700;
   align-items: center;
   cursor: pointer;
   color: #2299dd;
+  text-decoration: none;
   &:hover {
     background-color: #fff;
     color: #4d4d4d;
     border-bottom: 2px solid black;
   }
+  
 `;
 
 const CartLinkStyled = styled(Link)`
@@ -322,14 +324,13 @@ const Navbar = ({ openLoginHandler }) => {
   const [sideMenu, setSideMenu] = useState(false);
   const [showDragMenu, setShowDragMenu] = useState(false);
   const [dragMenuPosition, setDragMenuPosition] = useState({});
-  const history = useHistory()
   const { loggedIn, firstName, lastName, setLoggedIn, setUserInInfo,cart} =  useAuthContext();
-
-
+  
   
   const ins = "https://about.instagram.com/ja-jp";
   const fb = "https://www.facebook.com/";
   const yt = "https://www.youtube.com/";
+  
   const toggleMenuHandler = () => {
     setSideMenu((prevState) => !prevState);
   };
@@ -339,12 +340,15 @@ const Navbar = ({ openLoginHandler }) => {
     openLoginHandler();
     toggleMenuHandler();
   };
-
+  
+  
   const logoutButtonHandler = () => {
     setLoggedIn(false);
     setUserInInfo({});
-    history.push("/home");
+    
   };
+
+
 
   const dragDownMenuHandler = () => {
     const userElement = document.getElementById("user_section");
@@ -411,10 +415,10 @@ const Navbar = ({ openLoginHandler }) => {
                       left={dragMenuPosition.left}
                       right={dragMenuPosition.right}
                     >
-                      <DragMenuLink>会員情報</DragMenuLink>
-                      <DragMenuLink>カート</DragMenuLink>
-                      <DragMenuLink>ツアー日程</DragMenuLink>
-                      <DragMenuLink onClick={logoutButtonHandler}>
+                      <DragMenuLink to="/">会員情報</DragMenuLink>
+                      <DragMenuLink to="/cart-page">カート</DragMenuLink>
+                      <DragMenuLink to="/">ツアー日程</DragMenuLink>
+                      <DragMenuLink to="/home" onClick={logoutButtonHandler}>
                         ログアウト
                       </DragMenuLink>
                     </DragDownMenu>

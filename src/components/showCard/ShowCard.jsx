@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Card from "./Card";
 import { projectFirestore } from "../../firebase/config";
 import CircularProgress from "@mui/material/CircularProgress";
-import {Redirect} from "react-router-dom"
+import {Navigate} from "react-router-dom"
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -103,13 +103,19 @@ const CardWrapper = () => {
             <Card location={travelData.kyusyuu} />
           </Container>
         </Wrapper>
+        <Wrapper id="sikoku-section">
+          <h1>四国</h1>
+          <Container>
+            <Card location={travelData.sikoku} />
+          </Container>
+        </Wrapper>
       </>
     );
   }
 
   if (!loading && !travelData) {
     return (
-      <Redirect to="/error"/>
+      <Navigate to="/error"/>
     );
   }
 

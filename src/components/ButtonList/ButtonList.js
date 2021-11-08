@@ -54,7 +54,14 @@ const ButtonList = () => {
         <ImageButton locate="九州" url={kyusyuuImg} />
         </Scroll>
 
+        <Scroll
+          to="sikoku-section"
+          smooth={true}
+          duration={1000}
+          offset={-80}
+        >
         <ImageButton locate="四国" url={sikokkuImg} />
+        </Scroll>
       </ImageWrapper>
     </ListWrapper>
   );

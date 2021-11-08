@@ -109,5 +109,41 @@ export const travelData = {
       price:"24800",
       duration:"2日間"
     }
+  ],
+  sikoku:[
+    {
+      id:"sk1",
+      title: "～観光・グルメに選べる得タビクーポン付～",
+      img:"https://www.his-j.com/kokunai/kanto/photo/item/shikoku/MYJ_ASUKANOYU4.jpg",
+      date:"2021/12/06",
+      des:"大浴場は寝湯、あつ湯、打たせ湯、露天、サウナとお湯三昧！夕食は地産地消にこだわった海の幸、愛媛野菜をふんだんに使用した滋味豊かな料理をご用意！道後温泉駅から徒歩5分",
+      price:"24800",
+      duration:"4日間"
+    },
+    {
+      id:"sk2",
+      title: "ジェットスター利用 自然・海・食を堪能 魅力溢れる ",
+      img:"https://www.his-j.com/kokunai/kanto/photo/item/shikoku/KCZ_NIYODO_YASUIKEIKOKU.jpg",
+      date:"2022/1/06",
+      des:"四季彩あふれる南海の名城「高知城」や龍馬ゆかりのスポット、桂浜の雄大な海など自然や歴史を身近に感じることができる高知県へ奇跡の清流と呼ばれる「仁淀川」、最後の清流と呼ばれる「四万十川」も美しい自然のスポットも！",
+      price:"22800",
+      duration:"5日間"
+    },{
+      id:"sk3",
+      title: "絶景【四万十川、父母ヶ浜】めぐり",
+      img:"https://www.his-j.com/kokunai/kanto/photo/item/shikoku/TAK_titibugahama10.jpg",
+      date:"2022/2/06",
+      des:"松林と砂浜、青い海が調和する景勝地、桂浜各自散策 坂本竜馬像などをお楽しみください。",
+      price:"26800",
+      duration:"3日間"
+    },{
+      id:"sk4",
+      title: "芸術・絶景に触れる旅～小豆島・直島・豊島・高松へ",
+      img:"https://www.his-j.com/kokunai/kanto/photo/item/shikoku/TAK_Olivepark.jpg",
+      date:"2021/12/16",
+      des:"美しい棚田風景に広がる豊島美術館や豊島横尾館、心臓音を保存する美術館や島グルメなど、各自お楽しみください！",
+      price:"44800",
+      duration:"2日間"
+    }
   ]
 };

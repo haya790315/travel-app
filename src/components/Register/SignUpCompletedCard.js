@@ -1,6 +1,6 @@
 import React,{useEffect,useState} from 'react'
 import styled from "styled-components"
-import {Redirect} from "react-router-dom"
+import {Navigate} from "react-router-dom"
 
 const CardContainer  = styled.div `
   position: fixed;
@@ -55,7 +55,7 @@ const SignUpCompletedCard = ({showCompleted}) => {
   }, [])
 
   if(countDownNumber<0){
-    return <Redirect to="/home"/>
+    return <Navigate to="/home"/>
   }
   
   return (

@@ -4,6 +4,8 @@ import ItemCard from "./ItemCard";
 import { useAuthContext } from "../../Contexts/AuthContext";
 import { flatten } from "lodash";
 import { useTravelDataContext } from "../../Contexts/TravelContext";
+import setNewUserInformation from "../../Hook/useSetNewUserInformation";
+
 const CartWrapper = styled.div`
   position: absolute;
   height: auto;
@@ -77,12 +79,15 @@ const ItemsList = styled.ul`
 const Cart = () => {
 
   const { travelData, isLoading } = useTravelDataContext();
-  const { cart } = useAuthContext();
+  const { cart,setUserInInfo } = useAuthContext();
   const [cartItems,setCartItems] = useState([])
- 
-    useEffect (()=>{
+  const userContext = useAuthContext()
+  
+  
+  useEffect (()=>{
 
-      const travelDataFlatten = flatten(Object.values(travelData));
+    const travelDataFlatten = flatten(Object.values(travelData));
+
       
       const addedCart = flatten(cart.map((cartItem)=>{
         
@@ -90,10 +95,38 @@ const Cart = () => {
       }))
 
       setCartItems(addedCart);
-    },[travelData,cart])
+      setNewUserInformation(userContext);
+    },[travelData,cart,userContext])
+    
     
     
 
+
+
+
+    const deleteButtonHandler = (id)=>{
+      const newCart = cart.filter(item=>item.id!==id)
+      setCartItems(newCart);
+
+      setUserInInfo(prev=>{
+        return {...prev,cart:newCart}
+      })
+
+    }
+    
+
+    const totalPrice = ()=>{
+      const travelDataFlatten = flatten(Object.values(travelData));
+      const priceArray = cart.map(({id,people})=>{
+        
+      const foundData = travelDataFlatten.find(({id:travelId})=>travelId===id)
+      return people*Number(foundData.price)
+    })
+      return priceArray.reduce((preValue,currentValue)=>preValue+currentValue,0)
+    }
+    
+  
+    
   
 
   if(isLoading){
@@ -106,18 +139,18 @@ const Cart = () => {
       <Title>カート</Title>
       <CartLeft>
       {cartItems.map((cartItem)=>{
-            return <ItemCard cartItem={cartItem}/>
+            return <ItemCard cartItem={cartItem} deleteButtonHandler={deleteButtonHandler}/>
           })}
       </CartLeft>
       <CartRight>
         <span>購入ツーア</span>
         <ItemsList>
-          {cartItems.map((cartItem)=>{
-            return <li>{cartItem.title}</li>
+          {cartItems.map((cartItem,index)=>{
+            return <li key={index}>ツアー番号:{cartItem.id}</li>
           })}
         </ItemsList>
         <span>合計</span>
-        <p>￥20000円</p> <ButtonStyled>購入手続きに進む</ButtonStyled>
+        <p >￥{totalPrice()}</p> <ButtonStyled>購入手続きに進む</ButtonStyled>
       </CartRight>
     </CartWrapper>
   );

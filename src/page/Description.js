@@ -1,11 +1,11 @@
 import React from 'react'
 import { Detail } from '../components'
-const Description = () => {
+const DescriptionPage = ({openLoginHandler}) => {
   return (
     <div>
-      <Detail />
+      <Detail openLoginHandler={openLoginHandler}/>
     </div>
   )
 }
 
-export default Description
+export default DescriptionPage;

@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthContextProvider } from "./Contexts/AuthContext";
 import { TravelContextProvider } from "./Contexts/TravelContext";
+
 ReactDOM.render(
   <React.StrictMode>
     <TravelContextProvider>

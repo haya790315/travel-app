@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import EmailInput from "./AccountInput";
 import PasswordInput from "./PasswordInput";
 import Modal from "./Modal";
@@ -91,7 +91,7 @@ const SignUpButton = styled.button`
   }
 `;
 
-const SignUpPageLink = styled(NavLink)`
+const SignUpPageLink = styled(Link)`
   color: black;
   text-decoration: none;
 `;
