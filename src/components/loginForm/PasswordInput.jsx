@@ -78,6 +78,9 @@ const PasswordInput = ({
   }, [value]);
 
   const submitButtonHandler = () => {
+    if(!localStorage.getItem("user")){
+    　 return setErrorMessage("新規登録をしてください")
+    }
     const user = JSON.parse(localStorage.getItem("user"));
     const loggedUser = user.find(
       ({ password, account }) =>

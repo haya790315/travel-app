@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar, LoginForm } from "./components";
-import { Home,SignUp, DescriptionPage, ErrorPage, CartPage,PreHomePage } from "./page";
+import { Home,SignUp, DescriptionPage, ErrorPage, CartPage,PreHomePage, ReservationPage,AboardPage } from "./page";
 function App() {
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const openLoginHandler = () => {
@@ -20,7 +20,8 @@ function App() {
           <Route path="/home" element={<Home />}/>
           <Route path="/products/:number" element={<DescriptionPage openLoginHandler={openLoginHandler}/>}/>
           <Route path="/sign-up" element={<SignUp />}/>
-          <Route path="/aboard"/>
+          <Route path="/aboard"  element={<AboardPage/>}/>
+          <Route path="/reservation"  element={<ReservationPage/>}/>
           <Route path="/cart-page" element={<CartPage />}/>
           <Route path="/error" element={<ErrorPage />}/>
           <Route path="/" element={<PreHomePage/>}/>

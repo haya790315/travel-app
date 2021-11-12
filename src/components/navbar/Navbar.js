@@ -181,15 +181,14 @@ const NavIconLink = styled(Link)`
 const NavItem = styled.li`
   height: 80px;
 
+  transition: all 0.5s ease-in-out;
   &:hover {
     transform: translateY(15%);
-    transition: all 0.5s ease-in-out;
   }
 
   @media screen and (max-width: 900px) {
     width: 100%;
     &:hover {
-      /* border: none; */
       transform: none;
       color: #4b59f7;
     }
@@ -415,9 +414,9 @@ const Navbar = ({ openLoginHandler }) => {
                       left={dragMenuPosition.left}
                       right={dragMenuPosition.right}
                     >
-                      <DragMenuLink to="/">会員情報</DragMenuLink>
+                      <DragMenuLink to="/user-information">会員情報</DragMenuLink>
                       <DragMenuLink to="/cart-page">カート</DragMenuLink>
-                      <DragMenuLink to="/">ツアー日程</DragMenuLink>
+                      <DragMenuLink to="/travel-date">ツアー日程</DragMenuLink>
                       <DragMenuLink to="/home" onClick={logoutButtonHandler}>
                         ログアウト
                       </DragMenuLink>
