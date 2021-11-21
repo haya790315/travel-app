@@ -1,13 +1,33 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import { Link } from "react-router-dom";
 import EmailInput from "./AccountInput";
 import PasswordInput from "./PasswordInput";
 import Modal from "./Modal";
 import { GrFormClose } from "react-icons/gr";
 
+const openModal = keyframes`
+  0%{
+    opacity:0;
+    transform: translate(-50%, -180%);
+
+  }
+  50%{
+    opacity:0.3;
+    transform: translate(-50%, -70%);
+
+  }
+  
+  100%{
+    opacity:0.7;
+    transform: translate(-50%, -50%);
+  }
+`
+
+
 const FormContainer = styled.div`
   position: absolute;
+  opacity: 1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -18,6 +38,7 @@ const FormContainer = styled.div`
   margin: auto auto;
   border: 1.2px solid #e2e2e2;
   border-radius: 4px;
+  animation: ${openModal} 0.5s  linear  ;
 `;
 
 const GrFormCloseStyled = styled(GrFormClose)`
@@ -95,6 +116,11 @@ const SignUpPageLink = styled(Link)`
   color: black;
   text-decoration: none;
 `;
+
+
+
+
+
 
 const LoginForm = ({ closeLoginHandler }) => {
   const [accountIsEntered, setAccountIsEntered] = useState(false);

@@ -23,7 +23,7 @@ const ModalStyled = styled.div`
   height: 300px;
   width: 250px;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: transparent;
 `;
 
 const Backdrop = ({ closeLoginHandler }) => {
