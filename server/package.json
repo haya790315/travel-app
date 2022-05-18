@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",
-  "homepage":".",
   "module": "commonjs",
   "scripts": {
     "start": "node  server.js",

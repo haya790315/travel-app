@@ -30,7 +30,6 @@ const Img = styled.img`
   object-fit: cover;
   &:hover{
     cursor: pointer;
-    
   }
 `;
 const ButtonContainer = styled.div`
@@ -137,7 +136,6 @@ export default function Slider() {
 
   return (
     <ContainerSlider>
-      `
       {imgData.map((item, index) => {
         return (
           <Slide key={index} active={slideIndex === index + 1}>

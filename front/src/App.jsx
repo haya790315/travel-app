@@ -23,7 +23,7 @@ function App() {
           <Route path="/aboard"  element={<AboardPage/>}/>
           <Route path="/reservation"  element={<ReservationPage/>}/>
           <Route path="/cart-page" element={<CartPage />}/>
-          <Route path="/error" element={<ErrorPage />}/>
+          <Route path="/*" element={<ErrorPage />}/>
           <Route path="/" element={<PreHomePage/>}/>
         </Routes>
       </Router>

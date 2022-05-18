@@ -63,7 +63,7 @@ const PasswordInput = ({
   closeLoginHandler,
 }) => {
   const { value, isValid, hasError, valueChangeHandler, inputIsTouched } =
-    useInput((value) => value.trim() !== "" && value.length > 7);
+    useInput((value) => value.trim() !== "" && value.trim().length >= 8);
 
   const { setUserInInfo, setLoggedIn } = useAuthContext();
 
@@ -79,7 +79,7 @@ const PasswordInput = ({
 
   const submitButtonHandler = () => {
     if(!localStorage.getItem("user")){
-    　 return setErrorMessage("新規登録をしてください")
+      return setErrorMessage("新規登録をしてください")
     }
     const user = JSON.parse(localStorage.getItem("user"));
     const loggedUser = user.find(
@@ -101,7 +101,7 @@ const PasswordInput = ({
       <Box
         component="form"
         sx={{
-          "& .MuiTextField-root": { m: 1, width: "35ch" },
+          "& .MuiTextField-root": { m: 1, width: "28ch" },
         }}
         noValidate
         autoComplete="off"
