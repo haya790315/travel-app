@@ -6,36 +6,35 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 3001;
 
-// console.log(process.env)
-
 const app = express();
+const apiRouter = express.Router();
 const router = express.Router();
 
-app.use(express.static(path.join(__dirname, "./dist")));
-
+app.use("/", express.static(path.join(__dirname, "./dist")));
 
 app.use(
   cors({
     origin: "http://localhost:3000",
   })
-  );
-  
-  router.get("/api", (req, res) => {
-    res.status(200).send({ successes: true, message: "this is api" });
-  });
-  
-  router.get("/api/error", function (req, res, next) {
-    res.status(404).send({
-      successes: false,
-      message: "ページが見つかりません",
-    });
-  });
-  
-  router.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./dist/index.html"));
-  });
-  app.use("/", router);
-  
-  http.createServer(app).listen(PORT, () => {
-    console.log(`listening port${PORT}`);
-  });
+);
+
+apiRouter.get(`*`, (req, res) => {
+  try {
+    const func = require(`./api/${req.params[0]}`);
+    return func(req, res);
+  } catch (err) {
+    console.log(err);
+    res.send("require handler error");
+  }
+});
+
+router.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./dist/index.html"));
+});
+app.use("/api", apiRouter);
+
+app.use("/", router);
+
+http.createServer(app).listen(PORT, () => {
+  console.log(`listening port${PORT}`);
+});
